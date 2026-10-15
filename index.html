@@ -249,6 +249,18 @@
   .lot-btn:disabled { opacity:.55; cursor:default; }
   .lot-history { margin-top:18px; font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-width:420px; }
   .lot-history span { padding:3px 9px; border-radius:20px; background:var(--panel-2); border:1px solid var(--border-2); }
+  /* 효과음 버튼 (홈 카드 위쪽). 슬롯이 비어 있으면 자리를 차지하지 않음 */
+  .snd-slot { display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:4px; }
+  .snd-slot:empty { display:none; }
+  .snd-btn { display:inline-flex; align-items:center; margin:0 5px 6px; min-height:48px; padding:10px 24px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.08); color:#fff; font-size:17px; font-weight:800;
+    cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; transition:background .15s, border-color .15s; }
+  .snd-btn .snd-ico { margin-right:8px; font-size:18px; }
+  .snd-btn:active { background:rgba(255,255,255,.22); }
+  .snd-btn.playing { border-color:#fff; background:rgba(255,255,255,.2); animation:sndPulse .6s ease-in-out infinite alternate; }
+  @keyframes sndPulse { from{ box-shadow:0 0 0 0 rgba(255,255,255,.4); } to{ box-shadow:0 0 0 9px rgba(255,255,255,0); } }
+  .home-card.theme-green .snd-btn { border-color:rgba(45,212,167,.6); }
+  .home-card.theme-yellow .snd-btn { border-color:rgba(245,224,107,.6); }
   /* 가위바위보 - 회색 */
   .home-card.theme-gray { background: radial-gradient(circle at 30% 25%, #2a2f38 0%, #14171c 70%); }
   .home-card.theme-gray .hc-badge { color: #9aa6b8; }
@@ -537,12 +549,14 @@
     </div>
     <div class="home-grid">
       <div class="home-card theme-green" id="homeSeatCard">
+        <div class="snd-slot" data-snd-slot="homeSeat"></div>
         <div class="hc-badge">SEAT ARRANGEMENT</div>
         <div class="hc-title">자리 배치</div>
         <div class="hc-desc">학급 좌석 배치 및 관리</div>
         <button class="hc-enter" onclick="openSeat()">들어가기 →</button>
       </div>
       <div class="home-card theme-yellow" id="homeCleanCard">
+        <div class="snd-slot" data-snd-slot="homeClean"></div>
         <div class="hc-badge">CLEANING DUTY</div>
         <div class="hc-title">청소</div>
         <div class="hc-desc">요일별 청소 구역 및 담당 명단</div>
@@ -2521,6 +2535,64 @@ function tick(){
   renderDayNav();
   renderCIP();
 }
+// ========== 효과음 ==========
+// 새 효과음 추가 방법
+//  1) 소리 파일(mp3 권장)을 sounds 폴더에 넣는다.
+//  2) 아래 SOUND_LIST에 한 줄 추가한다. slot은 버튼을 놓을 자리 이름이다.
+//  3) 버튼을 놓을 곳에 <div class="snd-slot" data-snd-slot="자리이름"></div> 를 넣는다.
+//     지금 있는 자리: homeSeat(홈 자리 배치 카드) / homeClean(홈 청소 카드)
+//  같은 slot에 여러 개를 넣으면 버튼이 나란히 표시된다.
+var SOUND_LIST = [
+  {id:"neinom", label:"네이놈", icon:"🔊", file:"sounds/neinom.mp3", slot:"homeClean"},
+  {id:"clean",  label:"청소",   icon:"🔊", file:"sounds/clean.mp3",  slot:"homeSeat"}
+];
+var soundPlayers = {};
+var soundCurrentId = null;
+function soundFind(id){ for(var i=0;i<SOUND_LIST.length;i++){ if(SOUND_LIST[i].id===id) return SOUND_LIST[i]; } return null; }
+function soundMark(id, on){
+  var btns=document.querySelectorAll('.snd-btn[data-snd-id="'+id+'"]');
+  for(var i=0;i<btns.length;i++) btns[i].classList.toggle("playing", on);
+}
+function soundGet(id){
+  if(soundPlayers[id]) return soundPlayers[id];
+  var item=soundFind(id); if(!item) return null;
+  var a=new Audio(); a.preload="auto"; a.src=item.file;
+  a.addEventListener("ended", function(){ soundMark(id,false); if(soundCurrentId===id) soundCurrentId=null; });
+  a.addEventListener("pause", function(){ soundMark(id,false); });
+  a.addEventListener("error", function(){ soundMark(id,false); showToast("효과음 파일을 불러오지 못했습니다 ("+item.label+")"); });
+  soundPlayers[id]=a;
+  return a;
+}
+// 누를 때마다 처음부터 재생. 다른 효과음이 나오는 중이면 멈추고 새로 재생한다.
+function playSound(id){
+  var a=soundGet(id); if(!a) return;
+  if(soundCurrentId && soundCurrentId!==id && soundPlayers[soundCurrentId]){ try{ soundPlayers[soundCurrentId].pause(); }catch(e){} }
+  try{ a.currentTime=0; }catch(e){}
+  soundCurrentId=id; soundMark(id,true);
+  var p;
+  try{ p=a.play(); }catch(e){ soundMark(id,false); showToast("효과음을 재생하지 못했습니다"); return; }
+  if(p && typeof p.then==="function"){
+    p.then(function(){ soundMark(id,true); }, function(){ soundMark(id,false); showToast("효과음을 재생하지 못했습니다. 화면을 한 번 누른 뒤 다시 시도하세요"); });
+  }
+}
+function renderSoundButtons(){
+  var slots=document.querySelectorAll("[data-snd-slot]");
+  for(var i=0;i<slots.length;i++){
+    var slot=slots[i], name=slot.getAttribute("data-snd-slot");
+    slot.innerHTML="";
+    for(var j=0;j<SOUND_LIST.length;j++){
+      var item=SOUND_LIST[j]; if(item.slot!==name) continue;
+      var b=document.createElement("button"); b.type="button"; b.className="snd-btn";
+      b.setAttribute("data-snd-id", item.id); b.setAttribute("aria-label", item.label+" 효과음 재생");
+      b.innerHTML='<span class="snd-ico">'+escapeHTML(item.icon||"🔊")+'</span>'+escapeHTML(item.label);
+      b.onclick=(function(id){ return function(){ playSound(id); }; })(item.id);
+      slot.appendChild(b);
+      soundGet(item.id); // 첫 재생이 바로 되도록 미리 불러오기
+    }
+  }
+}
+try{ renderSoundButtons(); }catch(e){ console.warn("효과음 버튼 생성 실패",e); }
+
 load(); tick(); setInterval(tick,1000);
 try{ if(typeof applyClassName==="function") applyClassName(); }catch(e){}
 window.__YAJA_READY__=true;
