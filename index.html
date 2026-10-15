@@ -307,12 +307,21 @@
   .home-menu-btn:hover { border-color:#fff; box-shadow:0 0 22px rgba(120,170,255,.8), 0 0 48px rgba(120,170,255,.45); }
   .home-order-btn { position:absolute; right:18px; top:18px; z-index:21; padding:9px 13px; border-radius:10px; border:1px solid var(--border-2); background:rgba(12,16,26,.85); color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
   @keyframes menuGlow { 0%,100%{ box-shadow:0 0 14px rgba(90,140,255,.45), 0 0 32px rgba(90,140,255,.25), 0 8px 24px rgba(0,0,0,.5); } 50%{ box-shadow:0 0 22px rgba(120,170,255,.75), 0 0 46px rgba(120,170,255,.4), 0 8px 24px rgba(0,0,0,.5); } }
-  #home, #home2 { position:relative; }
-  #home2 { display:none; height:100vh; padding:10px; }
-  #home2.on { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:10px; }
+  #home, #home2, #home3 { position:relative; }
+  #home2, #home3 { display:none; height:100vh; padding:10px; }
+  #home2.on, #home3.on { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:10px; }
+  /* 홈 페이지 넘김 (가운데) */
+  .home-pager { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:20; display:flex; align-items:center;
+    padding:6px; border-radius:16px; border:1px solid rgba(120,160,255,.7); background:rgba(12,16,26,.92);
+    box-shadow:0 0 16px rgba(90,140,255,.55), 0 0 36px rgba(90,140,255,.3), 0 8px 24px rgba(0,0,0,.5); animation:menuGlow 2.2s ease-in-out infinite; }
+  .home-pager .hp-btn { min-width:92px; min-height:46px; padding:10px 16px; border:none; border-radius:11px; background:transparent; color:#fff;
+    font-size:15px; font-weight:800; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .home-pager .hp-btn:active { background:rgba(120,160,255,.25); }
+  .home-pager .hp-btn:disabled { color:#4b5670; cursor:default; background:transparent; }
+  .home-pager .hp-num { margin:0 8px; font-size:13px; font-weight:800; color:#9fb4dc; letter-spacing:.05em; white-space:nowrap; }
   @media (max-width:700px) {
     #home.on { grid-template-columns:1fr; grid-template-rows:1fr 1fr; }
-    #home2.on { height:auto; min-height:100vh; grid-template-columns:1fr; grid-template-rows:repeat(4,minmax(260px,1fr)); }
+    #home2.on, #home3.on { height:auto; min-height:100vh; grid-template-columns:1fr; grid-template-rows:repeat(4,minmax(260px,1fr)); }
     .home-card .hc-title { font-size:34px; }
   }
   /* 청소 화면 */
@@ -397,6 +406,64 @@
     .vocab-day { min-height:58px; font-size:13px; }
     .vocab-editor-head { align-items:flex-start; flex-direction:column; }
     .vocab-table { min-width:760px; }
+  }
+  /* ===== 오목 (연한 흰색 테마) ===== */
+  #omok { display:none; height:100vh; flex-direction:column; color:#172033; background:linear-gradient(135deg,#eef2f8 0%,#e3e9f2 100%); }
+  #omok.on { display:flex; }
+  .omok-top { position:relative; display:flex; align-items:center; justify-content:center; padding:12px 72px; background:rgba(244,247,252,.95); border-bottom:1px solid #cfd9e8; text-align:center; }
+  .omok-badge { letter-spacing:.28em; font-size:11px; font-weight:800; color:#7a8aa6; margin-bottom:3px; }
+  .omok-title { font-size:26px; font-weight:900; color:#132039; }
+  .omok-home { position:absolute; right:18px; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:10px; border:1px solid #c3cee0; background:#f8fafd; font-size:17px; }
+  .omok-body { flex:1; min-height:0; display:flex; padding:14px; }
+  .omok-side { flex:0 0 290px; display:flex; flex-direction:column; margin-right:14px; padding:16px; border:1px solid #cfd9e8; border-radius:14px; background:rgba(250,251,254,.9); box-shadow:0 12px 30px rgba(41,58,89,.07); overflow-y:auto; }
+  .omok-side > * { margin-bottom:14px; }
+  .omok-modes { display:flex; padding:4px; border-radius:12px; background:#e7edf6; border:1px solid #d3dceb; }
+  .omok-modes button { flex:1; min-height:46px; padding:8px 6px; border:none; border-radius:9px; background:transparent; color:#5d6b84; font-size:14px; font-weight:800; }
+  .omok-modes button.on { background:#fff; color:#172033; box-shadow:0 2px 8px rgba(41,58,89,.15); }
+  .omok-turn { display:flex; align-items:center; justify-content:center; min-height:64px; padding:12px; border-radius:12px; background:#fff; border:1px solid #d3dceb; font-size:21px; font-weight:900; color:#132039; }
+  .omok-turn.win { background:#fff7e0; border-color:#f0c454; color:#8a5a00; }
+  .omok-turn-stone, .omok-mini-stone { display:inline-block; border-radius:50%; flex:none; }
+  .omok-turn-stone { width:30px; height:30px; margin-right:12px; }
+  .omok-mini-stone { width:16px; height:16px; margin-right:7px; vertical-align:-2px; }
+  .omok-turn-stone.black, .omok-mini-stone.black, .om-stone.black { background:radial-gradient(circle at 35% 30%, #6b6f78 0%, #1b1d22 55%, #08090b 100%); box-shadow:0 2px 4px rgba(0,0,0,.45); }
+  .omok-turn-stone.white, .omok-mini-stone.white, .om-stone.white { background:radial-gradient(circle at 35% 30%, #ffffff 0%, #eef1f5 55%, #c9ced8 100%); box-shadow:0 2px 4px rgba(0,0,0,.3); border:1px solid #b4bac6; }
+  .omok-score { display:flex; padding:10px 12px; border-radius:12px; background:#f3f6fb; border:1px solid #dbe3ef; font-size:14px; font-weight:800; color:#47546b; }
+  .omok-score > div { flex:1; text-align:center; }
+  .omok-score b { margin:0 3px 0 6px; font-size:20px; color:#132039; }
+  .omok-actions { display:flex; }
+  .omok-actions button { flex:1; min-height:52px; margin-right:8px; border-radius:11px; border:1px solid #c6d1e2; background:#fff; color:#172033; font-size:16px; font-weight:900; }
+  .omok-actions button:last-child { margin-right:0; }
+  .omok-actions button.primary { background:linear-gradient(135deg,#5b8def,#3b6fd4); border-color:transparent; color:#fff; }
+  .omok-actions button:disabled { opacity:.45; }
+  #omok .snd-btn { border-color:#c6d1e2; background:#fff; color:#172033; }
+  #omok .snd-btn.playing { background:#edf4ff; border-color:#5b8def; }
+  .omok-rule { font-size:12px; line-height:1.6; color:#6d7b92; font-weight:600; }
+  .omok-score-reset { align-self:flex-start; margin-top:auto; padding:6px 10px; border-radius:8px; border:1px solid #e3c4c4; background:transparent; color:#b54848; font-size:12px; font-weight:800; }
+  .omok-board-wrap { position:relative; flex:1; min-width:0; min-height:0; display:flex; align-items:center; justify-content:center; }
+  .omok-board { position:relative; display:grid; padding:1.6%; border-radius:12px; background:linear-gradient(135deg,#fbf8f0 0%,#f2ecdd 100%); border:1px solid #d9cfb8; box-shadow:0 18px 40px rgba(41,58,89,.14), inset 0 0 0 6px rgba(255,255,255,.5); touch-action:manipulation; -webkit-user-select:none; user-select:none; }
+  .om-cell { position:relative; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .om-cell::before { content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:#a8987a; }
+  .om-cell::after { content:""; position:absolute; top:0; bottom:0; left:50%; width:1px; background:#a8987a; }
+  .om-cell.om-l::before { left:50%; } .om-cell.om-r::before { right:50%; }
+  .om-cell.om-t::after { top:50%; } .om-cell.om-b::after { bottom:50%; }
+  .om-dot { position:absolute; left:50%; top:50%; width:18%; height:18%; margin:-9% 0 0 -9%; border-radius:50%; background:#8a7a5c; z-index:1; }
+  .om-stone { position:absolute; left:7%; top:7%; width:86%; height:86%; border-radius:50%; z-index:2; }
+  .om-stone.white { left:7%; top:7%; }
+  .om-stone.last::after { content:""; position:absolute; left:50%; top:50%; width:26%; height:26%; margin:-13% 0 0 -13%; border-radius:50%; background:#ef4444; }
+  .om-stone.win { box-shadow:0 0 0 3px #f5a623, 0 0 16px rgba(245,166,35,.85); }
+  .om-stone.pop { animation:omPop .18s ease-out; }
+  @keyframes omPop { from{ transform:scale(.6); opacity:.4; } to{ transform:scale(1); opacity:1; } }
+  .omok-result { position:absolute; left:0; top:0; right:0; bottom:0; display:none; align-items:center; justify-content:center; z-index:10; background:rgba(238,242,248,.35); }
+  .omok-result.on { display:flex; }
+  .omok-result-card { padding:24px 28px; border-radius:16px; background:#fff; border:1px solid #d3dceb; box-shadow:0 20px 50px rgba(41,58,89,.25); text-align:center; }
+  .omok-result-text { font-size:34px; font-weight:900; color:#132039; margin-bottom:16px; }
+  .omok-result-btns { display:flex; }
+  .omok-result-btns button { min-width:120px; min-height:50px; margin:0 5px; border-radius:11px; border:1px solid #c6d1e2; background:#fff; color:#172033; font-size:16px; font-weight:900; }
+  .omok-result-btns button.primary { background:linear-gradient(135deg,#5b8def,#3b6fd4); border-color:transparent; color:#fff; }
+  @media (max-width:860px) {
+    .omok-body { flex-direction:column; overflow-y:auto; }
+    .omok-side { flex:none; margin:0 0 12px; }
+    .omok-board-wrap { flex:none; min-height:96vw; }
   }
   /* 시계 옆 홈 버튼 */
   .timeadj .homebtn { font-size: 13px; }
@@ -544,6 +611,7 @@
         <button onclick="resetModule('lottery')">제비뽑기 기록 초기화</button>
         <button onclick="resetModule('clean')">청소 담당 초기화</button>
         <button onclick="resetModule('vocab')">단어장 초기화</button>
+        <button onclick="resetModule('omok')">오목 기록 초기화</button>
         <button class="sr-all" onclick="doResetModule('all')">⚠ 전체 초기화</button>
       </div>
     </div>
@@ -575,7 +643,7 @@
       </div>
     </div>
     <button class="home-order-btn" onclick="swapHomeOrder()" title="자리 배치와 청소 카드 순서 바꾸기">⇄ 순서 바꾸기</button>
-    <button class="home-menu-btn" onclick="openHome2()" title="숨긴 기능 보기">숨긴 기능 ▸</button>
+    <div class="home-pager"><button class="hp-btn" onclick="homeGo(-1)" disabled>◂ 이전</button><span class="hp-num">1 / 3</span><button class="hp-btn" onclick="homeGo(1)">다음 ▸</button></div>
   </div>
 </div>
 <div id="home2">
@@ -606,7 +674,23 @@
         <button class="hc-enter" onclick="openVocab()">들어가기 →</button>
       </div>
     </div>
-    <button class="home-menu-btn" onclick="backHome1()" title="돌아가기">◂ 메인</button>
+    <div class="home-pager"><button class="hp-btn" onclick="homeGo(-1)">◂ 이전</button><span class="hp-num">2 / 3</span><button class="hp-btn" onclick="homeGo(1)">다음 ▸</button></div>
+  </div>
+</div>
+<div id="home3">
+  <div class="home-inner">
+    <div class="home-grid">
+      <div class="home-card theme-white">
+        <div class="hc-badge">GOMOKU</div>
+        <div class="hc-title">오목</div>
+        <div class="hc-desc">2인 대전 · 컴퓨터 대결</div>
+        <button class="hc-enter" onclick="openOmok()">들어가기 →</button>
+      </div>
+      <div class="home-card theme-empty"><div class="hc-badge">COMING SOON</div><div class="hc-title">준비 중</div><div class="hc-desc">새 기능 자리</div></div>
+      <div class="home-card theme-empty"><div class="hc-badge">COMING SOON</div><div class="hc-title">준비 중</div><div class="hc-desc">새 기능 자리</div></div>
+      <div class="home-card theme-empty"><div class="hc-badge">COMING SOON</div><div class="hc-title">준비 중</div><div class="hc-desc">새 기능 자리</div></div>
+    </div>
+    <div class="home-pager"><button class="hp-btn" onclick="homeGo(-1)">◂ 이전</button><span class="hp-num">3 / 3</span><button class="hp-btn" onclick="homeGo(1)" disabled>다음 ▸</button></div>
   </div>
 </div>
 <div id="app">
@@ -800,6 +884,47 @@
     </div>
   </div>
 </div>
+<div id="omok">
+  <div class="omok-top">
+    <div>
+      <div class="omok-badge">GOMOKU</div>
+      <div class="omok-title">오목</div>
+    </div>
+    <button class="omok-home" onclick="goToStart()" title="첫 화면으로">🏠</button>
+  </div>
+  <div class="omok-body">
+    <div class="omok-side">
+      <div class="omok-modes">
+        <button id="omokModePvp" onclick="omokSetMode('pvp')">👥 2인 대전</button>
+        <button id="omokModeAi" onclick="omokSetMode('ai')">🤖 컴퓨터 대결</button>
+      </div>
+      <div class="omok-turn" id="omokTurn"><span class="omok-turn-stone black"></span><span id="omokTurnText">흑 차례</span></div>
+      <div class="omok-score">
+        <div><span class="omok-mini-stone black"></span><span id="omokScoreBLabel">흑</span><b id="omokScoreB">0</b>승</div>
+        <div><span class="omok-mini-stone white"></span><span id="omokScoreWLabel">백</span><b id="omokScoreW">0</b>승</div>
+      </div>
+      <div class="omok-actions">
+        <button onclick="omokUndo()" id="omokUndoBtn">↶ 무르기</button>
+        <button class="primary" onclick="omokNewGame()">⟳ 새 게임</button>
+      </div>
+      <div class="snd-slot" data-snd-slot="omokPanel"></div>
+      <div class="omok-rule">가로·세로·대각선으로 5개 이상 먼저 이으면 승리합니다. 흑이 먼저 둡니다.<br>컴퓨터 대결에서는 내가 흑, 컴퓨터가 백입니다.</div>
+      <button class="omok-score-reset" onclick="omokResetScore()">전적 초기화</button>
+    </div>
+    <div class="omok-board-wrap" id="omokBoardWrap">
+      <div class="omok-board" id="omokBoard"></div>
+      <div class="omok-result" id="omokResult">
+        <div class="omok-result-card">
+          <div class="omok-result-text" id="omokResultText">흑 승리!</div>
+          <div class="omok-result-btns">
+            <button onclick="omokCloseResult()">판 보기</button>
+            <button class="primary" onclick="omokNewGame()">새 게임</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="admin">
   <div class="adm-top">
     <div class="adm-title">🔐 관리자 모드 <span class="adm-sub">전체 데이터 관리</span></div>
@@ -963,7 +1088,9 @@ function goHome(){
 function goToStart(){
   document.getElementById("app").classList.remove("on");
   document.getElementById("home").classList.remove("on");
-  var h2=document.getElementById("home2"); if(h2) h2.classList.remove("on");
+  hideHomePages();
+  var om=document.getElementById("omok"); if(om) om.classList.remove("on");
+  if(typeof omokStopAi==="function") omokStopAi();
   var se=document.getElementById("seat"); if(se) se.classList.remove("on");
   var rp=document.getElementById("rps"); if(rp) rp.classList.remove("on");
   var lo=document.getElementById("lottery"); if(lo) lo.classList.remove("on");
@@ -972,9 +1099,21 @@ function goToStart(){
   var ad=document.getElementById("admin"); if(ad) ad.classList.remove("on");
   document.getElementById("start").style.display="flex";
 }
-// 홈 ↔ 두 번째 메뉴 페이지
-function openHome2(){ document.getElementById("home").classList.remove("on"); document.getElementById("home2").classList.add("on"); }
-function backHome1(){ document.getElementById("home2").classList.remove("on"); document.getElementById("home").classList.add("on"); }
+// 홈 메뉴 페이지 (한 페이지 4칸). 새 페이지를 만들면 HOME_PAGES에 id를 추가하고 각 페이지 가운데 번호(n / 전체)를 맞춘다.
+var HOME_PAGES = ["home","home2","home3"];
+function showHomePage(i){
+  for(var k=0;k<HOME_PAGES.length;k++){ var el=document.getElementById(HOME_PAGES[k]); if(el) el.classList.toggle("on", k===i); }
+  if(i===0) applyHomeOrder();
+}
+function homeGo(d){
+  var cur=0;
+  for(var k=0;k<HOME_PAGES.length;k++){ var el=document.getElementById(HOME_PAGES[k]); if(el && el.classList.contains("on")) cur=k; }
+  showHomePage(Math.max(0, Math.min(HOME_PAGES.length-1, cur+d)));
+}
+function hideHomePages(){ for(var k=0;k<HOME_PAGES.length;k++){ var el=document.getElementById(HOME_PAGES[k]); if(el) el.classList.remove("on"); } }
+// 이전 코드 호환용
+function openHome2(){ showHomePage(1); }
+function backHome1(){ showHomePage(0); }
 function applyHomeOrder(){
   let cleanFirst=false;
   try{ cleanFirst=localStorage.getItem("home_order_v1")==="clean-first"; }catch(e){}
@@ -1630,11 +1769,11 @@ function lotDraw(){
 
 // ========== 전체/모듈 초기화 (첫 화면) ==========
 function resetModule(which){
-  const labels={yaja:"야자 관리 내용", seat:"자리 배치 기록", rps:"가위바위보 기록", lottery:"제비뽑기 기록", clean:"청소 담당", vocab:"단어장", all:"전체 데이터"};
+  const labels={yaja:"야자 관리 내용", seat:"자리 배치 기록", rps:"가위바위보 기록", lottery:"제비뽑기 기록", clean:"청소 담당", vocab:"단어장", omok:"오목 기록", all:"전체 데이터"};
   askConfirm(labels[which]+" 초기화", labels[which]+"을(를) 초기화합니다. 되돌릴 수 없습니다.", ()=>doResetModule(which), "초기화");
 }
 function doResetModule(which){
-  const labels={yaja:"야자 관리 내용", seat:"자리 배치 기록", rps:"가위바위보 기록", lottery:"제비뽑기 기록", clean:"청소 담당", vocab:"단어장", all:"전체 데이터"};
+  const labels={yaja:"야자 관리 내용", seat:"자리 배치 기록", rps:"가위바위보 기록", lottery:"제비뽑기 기록", clean:"청소 담당", vocab:"단어장", omok:"오목 기록", all:"전체 데이터"};
   if(which==="yaja"||which==="all"){
     // 출결 기록만 초기화. 학생 명단과 정기 결석(reg) 설정은 그대로 유지.
     if(!students || students.length===0){ try{ load(); }catch(e){} }
@@ -1648,6 +1787,7 @@ function doResetModule(which){
   if(which==="lottery"||which==="all"){ localStorage.removeItem(LOT_KEY); lotItems=[]; lotHistory=[]; }
   if(which==="clean"||which==="all"){ localStorage.removeItem(CLEAN_KEY); cleanLoad(); if(document.getElementById("clean").classList.contains("on")) cleanRender(); }
   if(which==="vocab"||which==="all"){ localStorage.removeItem(VOCAB_KEY); vocabDays=vocabBlankDays(); vocabCurrentDay=1; }
+  if(which==="omok"||which==="all"){ try{ localStorage.removeItem(OMOK_KEY); }catch(e){} omokStopAi(); omok=null; omok=omokBlank(); if(document.getElementById("omok").classList.contains("on")) omokRender(); }
   scheduleCloudPush();
   showToast(labels[which]+" 초기화 완료");
 }
@@ -2446,6 +2586,242 @@ function tick(){
   renderDayNav();
   renderCIP();
 }
+// ========== 오목 ==========
+// 15×15 판. 흑(1)이 먼저 두고 5개 이상 이으면 승리(자유 규칙).
+// 컴퓨터 대결: 사람=흑, 컴퓨터=백. 컴퓨터는 공격·방어 점수로 다음 수를 고른다.
+var OMOK_N = 15;
+var OMOK_KEY = "omok_state_v1";
+var omok = null;
+var omokAiTimer = null;
+var omokAudio = null;
+var omokCells = [];
+var omokResultHidden = false;
+function omokBlank(){
+  var b=[]; for(var i=0;i<OMOK_N*OMOK_N;i++) b.push(0);
+  return {board:b, moves:[], turn:1, mode:(omok&&omok.mode)||"pvp", over:false, winner:0, winLine:[], score:(omok&&omok.score)||{b:0,w:0}};
+}
+function omokLoad(){
+  omok=null; omok=omokBlank();
+  try{
+    var d=JSON.parse(localStorage.getItem(OMOK_KEY));
+    if(d && Array.isArray(d.board) && d.board.length===OMOK_N*OMOK_N){
+      omok.board=d.board.map(function(v){ return v===1||v===2?v:0; });
+      omok.moves=Array.isArray(d.moves)?d.moves.filter(function(v){ return typeof v==="number"; }):[];
+      omok.turn=d.turn===2?2:1; omok.mode=d.mode==="ai"?"ai":"pvp";
+      omok.over=!!d.over; omok.winner=d.winner===1||d.winner===2?d.winner:0;
+      omok.winLine=Array.isArray(d.winLine)?d.winLine:[];
+      if(d.score) omok.score={b:Math.max(0,parseInt(d.score.b)||0), w:Math.max(0,parseInt(d.score.w)||0)};
+    }
+  }catch(e){}
+}
+function omokSave(){
+  try{ localStorage.setItem(OMOK_KEY, JSON.stringify(omok)); }catch(e){}
+}
+function openOmok(){
+  hideHomePages();
+  document.getElementById("omok").classList.add("on");
+  if(!omok) omokLoad();
+  omokBuildBoard();
+  omokResultHidden=false;
+  omokRender();
+  omokMaybeAi();
+}
+function omokBuildBoard(){
+  var board=document.getElementById("omokBoard");
+  if(!board) return;
+  if(!omokCells.length){
+    board.style.gridTemplateColumns="repeat("+OMOK_N+",1fr)";
+    board.style.gridTemplateRows="repeat("+OMOK_N+",1fr)";
+    var stars=[3*OMOK_N+3,3*OMOK_N+11,7*OMOK_N+7,11*OMOK_N+3,11*OMOK_N+11];
+    for(var i=0;i<OMOK_N*OMOK_N;i++){
+      var r=Math.floor(i/OMOK_N), c=i%OMOK_N;
+      var cell=document.createElement("div");
+      cell.className="om-cell"+(c===0?" om-l":"")+(c===OMOK_N-1?" om-r":"")+(r===0?" om-t":"")+(r===OMOK_N-1?" om-b":"");
+      cell.setAttribute("data-i", i);
+      if(stars.indexOf(i)>=0){ var dot=document.createElement("span"); dot.className="om-dot"; cell.appendChild(dot); }
+      board.appendChild(cell); omokCells.push(cell);
+    }
+    board.onclick=function(e){
+      var t=e.target;
+      while(t && t!==board && !t.getAttribute("data-i")) t=t.parentNode;
+      if(!t || t===board) return;
+      omokTap(parseInt(t.getAttribute("data-i"),10));
+    };
+    window.addEventListener("resize", omokFit);
+  }
+  omokFit();
+}
+// 화면 크기에 맞춰 정사각형 판 크기 계산
+function omokFit(){
+  var wrap=document.getElementById("omokBoardWrap"), board=document.getElementById("omokBoard");
+  if(!wrap || !board || !document.getElementById("omok").classList.contains("on")) return;
+  var size=Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight||wrap.clientWidth))-6;
+  if(size<240) size=Math.max(240, Math.floor(wrap.clientWidth)-6);
+  board.style.width=size+"px"; board.style.height=size+"px";
+}
+function omokRender(){
+  if(!omok) return;
+  var last=omok.moves.length?omok.moves[omok.moves.length-1]:-1;
+  for(var i=0;i<omokCells.length;i++){
+    var cell=omokCells[i], v=omok.board[i];
+    var st=cell.querySelector(".om-stone");
+    if(!v){ if(st) cell.removeChild(st); continue; }
+    if(!st){ st=document.createElement("span"); cell.appendChild(st); }
+    st.className="om-stone "+(v===1?"black":"white")+(i===last?" last":"")+(omok.winLine.indexOf(i)>=0?" win":"")+(i===last&&!omok.over?" pop":"");
+  }
+  document.getElementById("omokModePvp").classList.toggle("on", omok.mode==="pvp");
+  document.getElementById("omokModeAi").classList.toggle("on", omok.mode==="ai");
+  var ai=omok.mode==="ai";
+  document.getElementById("omokScoreBLabel").textContent=ai?"나(흑)":"흑";
+  document.getElementById("omokScoreWLabel").textContent=ai?"컴퓨터(백)":"백";
+  document.getElementById("omokScoreB").textContent=omok.score.b;
+  document.getElementById("omokScoreW").textContent=omok.score.w;
+  var turnBox=document.getElementById("omokTurn"), text, stoneColor;
+  if(omok.over){
+    stoneColor=omok.winner===2?"white":"black";
+    text=omok.winner?omokName(omok.winner)+" 승리!":"무승부";
+  } else {
+    stoneColor=omok.turn===1?"black":"white";
+    text=omokName(omok.turn)+" 차례"+(ai&&omok.turn===2?" · 생각 중…":"");
+  }
+  turnBox.classList.toggle("win", omok.over);
+  turnBox.querySelector(".omok-turn-stone").className="omok-turn-stone "+stoneColor;
+  document.getElementById("omokTurnText").textContent=text;
+  document.getElementById("omokUndoBtn").disabled=!omok.moves.length;
+  var res=document.getElementById("omokResult");
+  res.classList.toggle("on", omok.over && !omokResultHidden);
+  document.getElementById("omokResultText").textContent=text;
+}
+function omokName(c){
+  if(omok.mode==="ai") return c===1?"흑(나)":"백(컴퓨터)";
+  return c===1?"흑":"백";
+}
+function omokTap(i){
+  if(!omok || omok.over || omok.board[i]) return;
+  if(omok.mode==="ai" && omok.turn===2) return;
+  omokPut(i);
+  omokMaybeAi();
+}
+function omokPut(i){
+  omok.board[i]=omok.turn; omok.moves.push(i);
+  omokTick();
+  var line=omokWinLine(i);
+  if(line){
+    omok.over=true; omok.winner=omok.turn; omok.winLine=line;
+    if(omok.turn===1) omok.score.b++; else omok.score.w++;
+    omokResultHidden=false;
+  } else if(omok.moves.length>=OMOK_N*OMOK_N){
+    omok.over=true; omok.winner=0; omok.winLine=[];
+  } else {
+    omok.turn=3-omok.turn;
+  }
+  omokSave(); omokRender();
+}
+function omokWinLine(i){
+  var c=omok.board[i], r0=Math.floor(i/OMOK_N), c0=i%OMOK_N;
+  var dirs=[[0,1],[1,0],[1,1],[1,-1]];
+  for(var d=0;d<4;d++){
+    var line=[i];
+    for(var s=-1;s<=1;s+=2){
+      var r=r0+dirs[d][0]*s, cc=c0+dirs[d][1]*s;
+      while(r>=0&&r<OMOK_N&&cc>=0&&cc<OMOK_N&&omok.board[r*OMOK_N+cc]===c){ line.push(r*OMOK_N+cc); r+=dirs[d][0]*s; cc+=dirs[d][1]*s; }
+    }
+    if(line.length>=5) return line;
+  }
+  return null;
+}
+function omokMaybeAi(){
+  if(!omok || omok.mode!=="ai" || omok.over || omok.turn!==2 || omokAiTimer) return;
+  omokRender();
+  omokAiTimer=setTimeout(function(){
+    omokAiTimer=null;
+    if(!omok || omok.mode!=="ai" || omok.over || omok.turn!==2) return;
+    if(!document.getElementById("omok").classList.contains("on")) return;
+    omokPut(omokAiPick());
+  }, 450);
+}
+function omokStopAi(){ if(omokAiTimer){ clearTimeout(omokAiTimer); omokAiTimer=null; } }
+// 한 방향 패턴 점수: 이어진 돌 수(count)와 열린 끝 수(open)
+function omokPatternScore(count, open){
+  if(count>=5) return 1000000;
+  if(open===0) return 0;
+  if(count===4) return open===2?100000:12000;
+  if(count===3) return open===2?6000:500;
+  if(count===2) return open===2?400:50;
+  return open===2?12:3;
+}
+function omokPointScore(i, color){
+  var r0=Math.floor(i/OMOK_N), c0=i%OMOK_N, total=0;
+  var dirs=[[0,1],[1,0],[1,1],[1,-1]];
+  for(var d=0;d<4;d++){
+    var count=1, open=0;
+    for(var s=-1;s<=1;s+=2){
+      var r=r0+dirs[d][0]*s, cc=c0+dirs[d][1]*s;
+      while(r>=0&&r<OMOK_N&&cc>=0&&cc<OMOK_N&&omok.board[r*OMOK_N+cc]===color){ count++; r+=dirs[d][0]*s; cc+=dirs[d][1]*s; }
+      if(r>=0&&r<OMOK_N&&cc>=0&&cc<OMOK_N&&omok.board[r*OMOK_N+cc]===0) open++;
+    }
+    total+=omokPatternScore(count, open);
+  }
+  return total;
+}
+function omokAiPick(){
+  var best=-1, bestList=[], center=Math.floor(OMOK_N/2);
+  if(!omok.moves.length) return center*OMOK_N+center;
+  for(var i=0;i<OMOK_N*OMOK_N;i++){
+    if(omok.board[i]) continue;
+    var r0=Math.floor(i/OMOK_N), c0=i%OMOK_N, near=false;
+    for(var dr=-2;dr<=2&&!near;dr++) for(var dc=-2;dc<=2&&!near;dc++){
+      var r=r0+dr, c=c0+dc;
+      if(r>=0&&r<OMOK_N&&c>=0&&c<OMOK_N&&omok.board[r*OMOK_N+c]) near=true;
+    }
+    if(!near) continue;
+    var score=omokPointScore(i,2)*1.1 + omokPointScore(i,1) - (Math.abs(r0-center)+Math.abs(c0-center))*0.5;
+    if(score>best+0.001){ best=score; bestList=[i]; }
+    else if(Math.abs(score-best)<=0.001) bestList.push(i);
+  }
+  if(!bestList.length){ for(var k=0;k<omok.board.length;k++) if(!omok.board[k]) return k; }
+  return bestList[Math.floor(Math.random()*bestList.length)];
+}
+function omokUndo(){
+  if(!omok || !omok.moves.length) return;
+  omokStopAi();
+  if(omok.over && omok.winner){ if(omok.winner===1) omok.score.b=Math.max(0,omok.score.b-1); else omok.score.w=Math.max(0,omok.score.w-1); }
+  omok.over=false; omok.winner=0; omok.winLine=[];
+  var n=1;
+  // 컴퓨터 대결에서는 내 수까지 함께 무른다 (컴퓨터 수 + 내 수)
+  if(omok.mode==="ai" && omok.board[omok.moves[omok.moves.length-1]]===2 && omok.moves.length>=2) n=2;
+  for(var k=0;k<n;k++){ var idx=omok.moves.pop(); omok.board[idx]=0; }
+  omok.turn=omok.moves.length%2===0?1:2;
+  omokSave(); omokRender(); omokMaybeAi();
+}
+function omokNewGame(){
+  omokStopAi();
+  omok=omokBlank(); omokResultHidden=false;
+  omokSave(); omokRender();
+}
+function omokSetMode(m){
+  if(!omok || omok.mode===m) return;
+  var apply=function(){ omokStopAi(); omok.mode=m; omok=omokBlank(); omok.mode=m; omokSave(); omokRender(); };
+  if(omok.moves.length && !omok.over) askConfirm("모드 변경", "진행 중인 판을 끝내고 "+(m==="ai"?"컴퓨터 대결":"2인 대전")+"으로 새로 시작합니다.", apply, "새로 시작");
+  else apply();
+}
+function omokCloseResult(){ omokResultHidden=true; omokRender(); }
+function omokResetScore(){
+  askConfirm("전적 초기화", "흑·백 승리 기록을 0으로 되돌립니다.", function(){ omok.score={b:0,w:0}; omokSave(); omokRender(); }, "초기화");
+}
+// 돌 놓는 소리 (짧은 '딱' 소리, 지원하지 않는 브라우저에서는 무음)
+function omokTick(){
+  try{
+    var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
+    if(!omokAudio) omokAudio=new Ctx();
+    if(omokAudio.state==="suspended" && omokAudio.resume) omokAudio.resume();
+    var t=omokAudio.currentTime, o=omokAudio.createOscillator(), g=omokAudio.createGain();
+    o.type="triangle"; o.frequency.setValueAtTime(900,t); o.frequency.exponentialRampToValueAtTime(220,t+0.06);
+    g.gain.setValueAtTime(0.35,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.09);
+    o.connect(g); g.connect(omokAudio.destination); o.start(t); o.stop(t+0.1);
+  }catch(e){}
+}
+
 // ========== 효과음 ==========
 // 효과음은 두 종류다.
 //  1) 기본 효과음: sounds 폴더의 파일. 아래 SOUND_LIST에 한 줄씩 적는다.
@@ -2459,6 +2835,7 @@ var SOUND_SLOTS = [
   {id:"yajaTools", name:"야자 관리 화면 · 전체 참석 옆"},
   {id:"rpsStage",  name:"가위바위보 화면 · 시작 버튼 아래"},
   {id:"lotStage",  name:"제비뽑기 화면 · 뽑기 버튼 아래"},
+  {id:"omokPanel", name:"오목 화면 · 왼쪽 버튼 아래"},
   {id:"homeSeat",  name:"홈 화면 · 자리 배치 카드"},
   {id:"homeClean", name:"홈 화면 · 청소 카드"}
 ];
