@@ -259,6 +259,11 @@
   .snd-btn:active { background:rgba(255,255,255,.22); }
   .snd-btn.playing { border-color:#fff; background:rgba(255,255,255,.2); animation:sndPulse .6s ease-in-out infinite alternate; }
   @keyframes sndPulse { from{ box-shadow:0 0 0 0 rgba(255,255,255,.4); } to{ box-shadow:0 0 0 9px rgba(255,255,255,0); } }
+  .snd-slot-clean { position:absolute; right:0; top:46px; justify-content:flex-end; margin:0; }
+  .snd-slot-clean .snd-btn { margin:0; min-height:40px; padding:8px 16px; font-size:14px; border-color:rgba(245,224,107,.6); }
+  .snd-slot-inline { display:inline-flex; margin:0; }
+  .seat-actions .snd-slot-inline .snd-btn { margin:0; min-height:0; border-radius:10px; border-color:rgba(45,212,167,.6); color:#fff; }
+  .seat-actions .snd-slot-inline .snd-btn .snd-ico { margin-right:6px; font-size:14px; }
   .home-card.theme-green .snd-btn { border-color:rgba(45,212,167,.6); }
   .home-card.theme-yellow .snd-btn { border-color:rgba(245,224,107,.6); }
   /* 가위바위보 - 회색 */
@@ -339,6 +344,7 @@
     .clean-row .cr-head { align-items:center; min-height:auto; }
     .clean-row .cr-list { padding:2px 0 4px; }
     .clean-edit-toggle { position:static; display:block; margin:0 auto 14px; }
+    .snd-slot-clean { position:static; justify-content:center; margin:0 0 14px; }
   }
   /* 영어 단어장 화면 */
   #vocab { display:none; height:100vh; color:#172033; background:linear-gradient(135deg,#e8edf6 0%,#dfe7f2 100%); }
@@ -671,8 +677,8 @@
       <button class="sa-draw" onclick="seatDraw()" id="seatDrawBtn">자리 뽑기!</button>
       <button class="sa-swap" onclick="seatToggleSwap()" id="seatSwapBtn">⇄ 배치 바꾸기</button>
       <button class="sa-reset" onclick="seatReset()">↺ 초기화</button>
-      <button class="sa-dl" onclick="seatDownloadHWP()">⬇ HWP 다운로드 (게시용)</button>
       <button class="sa-exam" onclick="seatOpenExamMenu()" id="seatExamBtn">시험용</button>
+      <span class="snd-slot snd-slot-inline" data-snd-slot="seatTop"></span>
     </div>
     <button class="seat-home" onclick="goToStart()" title="첫 화면으로">🏠</button>
   </div>
@@ -753,6 +759,7 @@
     <div class="clean-title">청소 담당</div>
     <div class="clean-rule">매주 화요일 · 짝수 번호 청소 &nbsp;|&nbsp; 매주 목요일 · 홀수 번호 청소</div>
     <button type="button" class="clean-edit-toggle" id="cleanEditBtn" onclick="cleanToggleEdit()">✎ 명단 수정</button>
+    <div class="snd-slot snd-slot-clean" data-snd-slot="cleanTop"></div>
     <div class="clean-tabs">
       <button id="ctTue" class="on" onclick="cleanSetDay('tue')">화요일</button>
       <button id="ctThu" onclick="cleanSetDay('thu')">목요일</button>
@@ -1507,34 +1514,6 @@ function seatExamLayout(kind){
   }
   seatSave(); seatSyncControls(); seatRenderGrid(); seatRenderNames();
   showToast("모의고사 5×7 배치 완료");
-}
-function seatDownloadHWP(){
-  // HWP는 한글 전용 포맷이라 한글에서 바로 열리는 호환 문서(.doc 표 형태)로 좌석표를 내보냄
-  let rows="";
-  for(let r=0;r<seatRows;r++){
-    let tds="";
-    for(let col=0;col<seatCols;col++){
-      const c=seatCells[r*seatCols+col];
-      const txt = (!c||c.blank) ? "" : (c.name||"");
-      const bg = (!c||c.blank) ? "#dddddd" : "#ffffff";
-      tds+=`<td style="border:1px solid #333;width:90px;height:60px;text-align:center;font-size:15px;font-weight:bold;background:${bg}">${escapeHTML(txt)}</td>`;
-    }
-    rows+=`<tr>${tds}</tr>`;
-  }
-  const now=new Date();
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"></head><body>
-    <h2 style="text-align:center">2-2반 자리 배치도</h2>
-    <p style="text-align:center;border:2px solid #333;width:200px;margin:0 auto 16px;padding:6px;font-weight:bold">교 탁</p>
-    <table style="border-collapse:collapse;margin:0 auto">${rows}</table>
-    <p style="text-align:center;color:#888;font-size:12px;margin-top:16px">생성일: ${now.toLocaleString("ko-KR")}</p>
-    </body></html>`;
-  try{
-    const blob=new Blob(["\ufeff"+html], {type:"application/msword"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a"); a.href=url; a.download="2-2반_자리배치도.doc";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url), 1500);
-  }catch(e){ alert("다운로드에 실패했습니다. 브라우저 설정을 확인해주세요."); }
 }
 
 // ========== 가위바위보 ==========
@@ -2540,11 +2519,12 @@ function tick(){
 //  1) 소리 파일(mp3 권장)을 sounds 폴더에 넣는다.
 //  2) 아래 SOUND_LIST에 한 줄 추가한다. slot은 버튼을 놓을 자리 이름이다.
 //  3) 버튼을 놓을 곳에 <div class="snd-slot" data-snd-slot="자리이름"></div> 를 넣는다.
-//     지금 있는 자리: homeSeat(홈 자리 배치 카드) / homeClean(홈 청소 카드)
+//     지금 있는 자리: cleanTop(청소 화면 명단 수정 아래) / seatTop(자리 배치 화면 시험용 옆)
+//                    homeSeat(홈 자리 배치 카드) / homeClean(홈 청소 카드)
 //  같은 slot에 여러 개를 넣으면 버튼이 나란히 표시된다.
 var SOUND_LIST = [
-  {id:"neinom", label:"네이놈", icon:"🔊", file:"sounds/neinom.mp3", slot:"homeClean"},
-  {id:"clean",  label:"청소",   icon:"🔊", file:"sounds/clean.mp3",  slot:"homeSeat"}
+  {id:"neinom", label:"네이놈", icon:"🔊", file:"sounds/neinom.mp3", slot:"cleanTop"},
+  {id:"clean",  label:"청소",   icon:"🔊", file:"sounds/clean.mp3",  slot:"seatTop"}
 ];
 var soundPlayers = {};
 var soundCurrentId = null;
