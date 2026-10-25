@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>캡챠(CAPCHA) | 찾아가는 인생 이야기 인터뷰</title>
+  <meta name="description" content="캡챠는 어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드리는 서비스입니다. 대전에서 시범 제작 중입니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="캡챠(CAPCHA) | 찾아가는 인생 이야기 인터뷰">
+  <meta property="og:description" content="어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드립니다.">
+  <meta name="theme-color" content="#222222">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/noto-serif-kr-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+
+  <header class="site-header on-dark" id="top">
+    <div class="header-inner">
+      <a class="logo" href="index.html" aria-label="캡챠 CAPCHA 처음 화면">
+        <span class="logo-en" lang="en">CAPCHA</span>
+        <span class="logo-ko">캡챠</span>
+      </a>
+      <nav class="gnb" aria-label="주 메뉴">
+        <ul>
+          <li><a href="#why">왜 캡챠인가</a></li>
+          <li><a href="#results">결과물</a></li>
+          <li><a href="#process">진행 과정</a></li>
+          <li><a href="#faq">자주 묻는 질문</a></li>
+          <li><a href="apply.html">신청 안내</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 첫 화면: 슬라이드 3장 + 아래 탭 3개와 진행 막대 -->
+    <section class="hero-carousel" aria-roledescription="carousel" aria-label="캡챠 소개">
+      <h1 class="sr-only">캡챠(CAPCHA) 찾아가는 인생 이야기 인터뷰 · 영상과 책으로 남기는 기록</h1>
+
+      <div class="hero hero-slides on-dark" aria-live="off">
+        <div class="hero-slide is-active" id="hero-slide-1" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-1">
+          <div class="media media-cover media-dim">
+            <!-- 사진 자리: 실제 사진으로 바꿀 때 아래 div를 <img src="images/hero-1.jpg" alt="..." width="1600" height="900">로 교체 -->
+            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 어르신 댁에서 인터뷰하는 장면">[어르신 댁 거실에서 인터뷰하는 장면 · 1600x900]</div>
+          </div>
+          <div class="hero-content">
+            <p class="eyebrow" lang="en">Life Story Interview</p>
+            <h2 class="hero-title" lang="en">Every Life<br>Is a Story</h2>
+            <p class="hero-text">어르신 댁에 직접 찾아가 인생 이야기를 듣습니다.<br>그 이야기를 영상과 책으로 남겨 드립니다.</p>
+            <a class="btn btn-light" href="apply.html">신청 안내 보기 <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <div class="hero-slide" id="hero-slide-2" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-2">
+          <div class="media media-cover media-dim">
+            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 카메라 앞에서 이야기하는 어르신">[카메라 앞에서 이야기하는 어르신 · 1600x900]</div>
+          </div>
+          <div class="hero-content">
+            <p class="eyebrow" lang="en">Interview Film</p>
+            <h2 class="hero-title" lang="en">A Voice<br>to Keep</h2>
+            <p class="hero-text">부모님의 목소리와 표정을 인터뷰 영상에 담습니다.<br>오래 기억하고 싶은 모습을 그대로 남깁니다.</p>
+            <a class="btn btn-light" href="#results">결과물 보기 <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <div class="hero-slide" id="hero-slide-3" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-3">
+          <div class="media media-cover media-dim">
+            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 펼쳐 놓은 생애 기록 책과 QR">[펼쳐 놓은 생애 기록 책과 QR · 1600x900]</div>
+          </div>
+          <div class="hero-content">
+            <p class="eyebrow" lang="en">Life Story Book</p>
+            <h2 class="hero-title" lang="en">Pages<br>That Speak</h2>
+            <p class="hero-text">인터뷰를 생애 기록 책으로 엮습니다.<br>책 속 QR을 찍으면 인터뷰 영상이 열립니다.</p>
+            <a class="btn btn-light" href="#process">진행 과정 보기 <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-tabs" hidden>
+        <div class="hero-tabs-inner">
+          <div class="hero-tablist" role="tablist" aria-label="슬라이드 선택">
+            <button class="hero-tab is-active" id="hero-tab-1" type="button" role="tab" aria-selected="true" aria-controls="hero-slide-1">
+              <span class="hero-tab-track" aria-hidden="true"><span class="hero-tab-fill"></span></span>
+              <span class="hero-tab-num" lang="en">01</span>
+              <span class="hero-tab-label">찾아가는 인터뷰</span>
+            </button>
+            <button class="hero-tab" id="hero-tab-2" type="button" role="tab" aria-selected="false" aria-controls="hero-slide-2" tabindex="-1">
+              <span class="hero-tab-track" aria-hidden="true"><span class="hero-tab-fill"></span></span>
+              <span class="hero-tab-num" lang="en">02</span>
+              <span class="hero-tab-label">인터뷰 영상</span>
+            </button>
+            <button class="hero-tab" id="hero-tab-3" type="button" role="tab" aria-selected="false" aria-controls="hero-slide-3" tabindex="-1">
+              <span class="hero-tab-track" aria-hidden="true"><span class="hero-tab-fill"></span></span>
+              <span class="hero-tab-num" lang="en">03</span>
+              <span class="hero-tab-label">생애 기록 책</span>
+            </button>
+          </div>
+          <button class="hero-toggle" type="button" aria-label="슬라이드 자동 넘김 멈춤">
+            <svg class="icon-pause" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><rect x="2" y="1" width="3" height="12" fill="currentColor"/><rect x="9" y="1" width="3" height="12" fill="currentColor"/></svg>
+            <svg class="icon-play" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 왜 캡챠인가: 차별점이 정해지면 [차별점 1~3]을 바꿔 주세요. 문장 예시는 README에 있습니다. -->
+    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="container">
+        <div class="sec-head reveal">
+          <p class="eyebrow" lang="en">Why CAPCHA</p>
+          <h2 class="sec-title" id="why-title"><span class="en" lang="en">Why We Visit</span><span class="ko">왜 캡챠인가</span></h2>
+          <p class="sec-desc">캡챠(CAPCHA)는 보안문자 CAPTCHA와 관련이 없는 인생 이야기 기록 서비스입니다.<br>지금은 대전에서 시범 제작을 하고 있습니다.</p>
+        </div>
+        <ul class="why-list">
+          <li class="why-item reveal">
+            <span class="why-num" lang="en" aria-hidden="true">01</span>
+            <!-- 예시: 어르신 댁으로 찾아갑니다 / 익숙한 집에서 편하게 이야기를 나눕니다. -->
+            <h3>[차별점 1]</h3>
+            <p>[차별점 1 설명 문장]</p>
+          </li>
+          <li class="why-item reveal">
+            <span class="why-num" lang="en" aria-hidden="true">02</span>
+            <!-- 예시: 자녀의 질문을 인터뷰에 담습니다 / 사전 질문지로 자녀가 부모님께 묻고 싶은 질문을 미리 받습니다. -->
+            <h3>[차별점 2]</h3>
+            <p>[차별점 2 설명 문장]</p>
+          </li>
+          <li class="why-item reveal">
+            <span class="why-num" lang="en" aria-hidden="true">03</span>
+            <!-- 예시: 글과 목소리를 함께 남깁니다 / 책 속 QR을 찍으면 인터뷰 영상이 열립니다. -->
+            <h3>[차별점 3]</h3>
+            <p>[차별점 3 설명 문장]</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 결과물 3가지: 어두운 사진 띠 위에 카드 3장을 겹쳐 놓은 구간 -->
+    <section class="results" id="results" aria-labelledby="results-title">
+      <div class="band on-dark">
+        <div class="media media-cover media-dim">
+          <div class="ph ph-dark ph-corner ph-top" role="img" aria-label="사진 준비 중: 부모님과 자녀가 함께 옛 앨범을 보는 장면">[부모님과 자녀가 함께 옛 앨범을 보는 장면 · 1920x800]</div>
+        </div>
+        <div class="container band-inner">
+          <div class="sec-head reveal">
+            <p class="eyebrow" lang="en">What We Make</p>
+            <h2 class="sec-title" id="results-title"><span class="en" lang="en">What Remains</span><span class="ko">결과물 3가지</span></h2>
+            <p class="sec-desc">인터뷰 영상과 생애 기록 책을 함께 만듭니다.<br>3D 피규어는 원하실 때 더할 수 있습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container cards">
+        <article class="card reveal">
+          <div class="media">
+            <div class="ph" role="img" aria-label="사진 준비 중: 인터뷰 영상의 한 장면">[인터뷰 영상의 한 장면 · 1200x800]</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num" lang="en">01</span>
+            <h3 class="card-title">인터뷰 영상</h3>
+            <p>어르신 댁에서 촬영한 인생 이야기 인터뷰를 영상으로 편집합니다.</p>
+            <ul class="card-points">
+              <li>부모님의 목소리와 표정을 그대로 담습니다.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="media">
+            <div class="ph" role="img" aria-label="사진 준비 중: 펼쳐 놓은 생애 기록 책">[펼쳐 놓은 생애 기록 책 · 1200x800]</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num" lang="en">02</span>
+            <h3 class="card-title">생애 기록 책</h3>
+            <p>인터뷰 내용과 옛 사진을 엮어 한 권의 책으로 만듭니다.</p>
+            <ul class="card-points">
+              <li>책 속 QR을 찍으면 인터뷰 영상이 열립니다.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="media">
+            <div class="ph" role="img" aria-label="사진 준비 중: 실사형과 캐릭터형 3D 피규어">[실사형 · 캐릭터형 3D 피규어 · 1200x800]</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num" lang="en">03</span>
+            <h3 class="card-title">3D 피규어 <span class="badge">선택</span></h3>
+            <p>어르신 모습을 본뜬 3D 피규어입니다. 원하실 때만 만듭니다.</p>
+            <ul class="card-points">
+              <li>실사형과 캐릭터형이 있습니다.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 진행 과정 -->
+    <section class="section bg-gray" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <div class="sec-head reveal">
+          <p class="eyebrow" lang="en">How It Works</p>
+          <h2 class="sec-title" id="process-title"><span class="en" lang="en">From Visit to Keepsake</span><span class="ko">진행 과정</span></h2>
+          <p class="sec-desc">신청부터 전달까지 이 순서로 진행합니다.</p>
+        </div>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">01</span>
+            <div>
+              <h3 class="step-title">신청</h3>
+              <p>신청서를 남겨 주시면 상담 후 일정과 가격을 안내합니다.</p>
+              <a class="text-link" href="apply.html">신청 안내 보기 <span aria-hidden="true">→</span></a>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">02</span>
+            <div>
+              <h3 class="step-title">사전 질문지</h3>
+              <p>인터뷰 전에 질문지를 작성합니다. 적어 주신 내용으로 인터뷰를 준비합니다.</p>
+              <ul class="chips" aria-label="사전 질문지 항목">
+                <li>부모님의 사소한 일상</li>
+                <li>간직하고 싶은 이야기</li>
+                <li>자녀가 부모님께 묻고 싶은 질문</li>
+                <li>옛 사진</li>
+              </ul>
+              <a class="text-link" href="story-form.html">사전 질문지 안내 보기 <span aria-hidden="true">→</span></a>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">03</span>
+            <div>
+              <h3 class="step-title">찾아가는 인터뷰 촬영</h3>
+              <p>어르신 댁에 직접 찾아가 인터뷰를 촬영합니다.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">04</span>
+            <div>
+              <h3 class="step-title">영상 · 책 제작</h3>
+              <p>인터뷰를 바탕으로 인터뷰 영상과 생애 기록 책을 만듭니다.</p>
+            </div>
+          </li>
+          <li class="step step-optional reveal">
+            <span class="step-num" lang="en" aria-hidden="true">05</span>
+            <div>
+              <h3 class="step-title">피규어 제작 <span class="badge">선택</span></h3>
+              <p>원하시는 경우 어르신 모습을 본뜬 3D 피규어를 만듭니다.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">06</span>
+            <div>
+              <h3 class="step-title">전달</h3>
+              <p>완성한 영상과 책을 가족께 전달합니다.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num" lang="en" aria-hidden="true">07</span>
+            <div>
+              <h3 class="step-title">촬영 뒤 추가 자료 반영</h3>
+              <p>촬영 뒤에 찾은 사진이나 떠오른 이야기도 보내 주시면 반영합니다.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 자주 묻는 질문 -->
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="sec-head reveal">
+          <p class="eyebrow" lang="en">FAQ</p>
+          <h2 class="sec-title" id="faq-title"><span class="en" lang="en">Questions</span><span class="ko">자주 묻는 질문</span></h2>
+        </div>
+        <div class="faq-list reveal">
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">가격은 얼마인가요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>가격은 상담 후 안내합니다. 신청서를 남겨 주시면 연락드립니다.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">어느 지역에서 이용할 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>대전에서 먼저 시작합니다. 다른 지역은 <a href="mailto:[이메일]">[이메일]</a>로 문의해 주세요.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">어떤 결과물을 받나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>인터뷰 영상과 생애 기록 책을 받습니다. 책 속 QR을 찍으면 영상이 열립니다.</p>
+              <p>어르신 모습을 본뜬 3D 피규어(실사형 · 캐릭터형)는 선택 사항입니다.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">사전 질문지는 무엇인가요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>인터뷰 전에 작성하는 질문지입니다. 부모님의 사소한 일상 · 간직하고 싶은 이야기 · 자녀가 부모님께 묻고 싶은 질문 · 옛 사진을 받습니다.</p>
+              <p><a href="story-form.html">사전 질문지 안내 보기</a></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">옛 사진은 어떻게 보내나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>사전 질문지(구글 설문지)에 올리거나 <a href="mailto:[이메일]">[이메일]</a>로 보내 주세요.</p>
+              <p>구글 설문지에서 파일을 올리려면 구글 계정 로그인이 필요합니다.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">촬영 뒤에 떠오른 이야기도 넣을 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>네. 촬영 뒤에 찾은 사진이나 이야기도 보내 주시면 반영합니다.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">영상은 누가 볼 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>영상은 유튜브 '일부 공개'로 올리고 책 속 QR로 여는 가족 전용 주소에서 봅니다.</p>
+              <p>일부 공개 영상은 주소를 아는 사람이면 누구나 볼 수 있습니다. 주소와 QR은 가족끼리만 나눠 주세요.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">촬영 시간과 제작 기간은 얼마나 걸리나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>[촬영 시간 · 제작 기간]</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">캡챠는 보안문자(CAPTCHA)와 관련이 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>관련이 없습니다. 캡챠(CAPCHA)는 인생 이야기를 기록하는 서비스의 이름입니다.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 신청 버튼 띠 -->
+    <section class="cta on-dark" aria-labelledby="cta-title">
+      <div class="media media-cover media-dim">
+        <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 두 손으로 옛 사진을 든 모습">[두 손으로 옛 사진을 든 모습 · 1920x800]</div>
+      </div>
+      <div class="container cta-inner">
+        <div class="sec-head reveal">
+          <p class="eyebrow" lang="en">Apply</p>
+          <h2 class="sec-title" id="cta-title"><span class="en" lang="en">Begin the Story</span><span class="ko">신청 안내</span></h2>
+          <p class="sec-desc">지금은 시범 제작 단계입니다.<br>신청서를 남겨 주시면 상담 후 일정과 가격을 안내합니다.</p>
+        </div>
+        <a class="btn btn-light btn-lg reveal" href="apply.html">신청 안내 보기 <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="to-top" href="#top" lang="en" aria-label="맨 위로">TOP</a>
+    <p class="footer-logo" lang="en">CAPCHA</p>
+    <ul class="footer-links">
+      <li><a class="is-strong" href="[처리방침 주소]">개인정보 처리방침</a></li>
+      <li><a href="mailto:[이메일]">문의 [이메일]</a></li>
+      <li><a href="story-form.html">사전 질문지 안내</a></li>
+    </ul>
+    <p class="footer-note">캡챠(CAPCHA)는 보안문자 CAPTCHA와 관련이 없습니다. 대전에서 시범 제작 중입니다.</p>
+    <p class="copyright">© 2026 캡챠(CAPCHA). All rights reserved.</p>
+  </footer>
+</body>
+</html>
