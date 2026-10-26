@@ -1,0 +1,173 @@
+rules_version = '2';
+
+// ==========================================================
+// 캡챠(CAPCHA) Cloud Firestore 보안 규칙
+// ----------------------------------------------------------
+// 쓰는 법
+// 1. 아래 isAdmin() 안의 [관리자 이메일]을 관리자로 쓸 구글 계정 이메일로 바꿉니다.
+//    여러 명이면 ['a@gmail.com', 'b@gmail.com'] 처럼 쉼표로 이어 적습니다.
+// 2. Firebase 콘솔 → Firestore Database → 규칙 탭에 이 파일 전체를 붙여 넣고 게시합니다.
+//
+// 정한 내용
+// - 누구나: 가족 영상 페이지 한 개를 주소(id)로 열기
+// - 로그인한 고객: 신청서 · 사전 질문지(사진 포함) · 문의 작성, 내가 쓴 것만 보기
+// - 관리자: 모든 기록 보기 · 진행 상태와 메모 바꾸기 · 문의 답변 · 가족 영상 페이지 만들기 · 삭제
+// - 위에 없는 읽기 · 쓰기는 모두 막힙니다.
+// ==========================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['[관리자 이메일]'];
+    }
+
+    function isOwner() {
+      return signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    function textOk(value, max) {
+      return value is string && value.size() <= max;
+    }
+
+    function requiredText(value, max) {
+      return value is string && value.size() > 0 && value.size() <= max;
+    }
+
+    // 새 기록의 주인 · 이메일 · 작성 시각이 로그인한 사람과 서버 시각과 같은지 확인합니다.
+    function stampedByMe() {
+      return request.resource.data.uid == request.auth.uid
+        && request.resource.data.userEmail == request.auth.token.get('email', '')
+        && request.resource.data.createdAt == request.time;
+    }
+
+    // 화면이 관리자 메뉴를 보여 줄지 정할 때 이 문서를 읽어 봅니다. (문서가 없어도 됩니다)
+    match /meta/adminCheck {
+      allow read: if isAdmin();
+    }
+
+    // ---------- 신청서 ----------
+    match /applications/{applicationId} {
+      allow read: if isAdmin() || isOwner();
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'applicantName', 'phone', 'parentAge', 'region',
+             'regionDetail', 'products', 'preferredTime', 'message', 'consent', 'status', 'adminMemo', 'createdAt', 'updatedAt'])
+        && stampedByMe()
+        && request.resource.data.updatedAt == request.time
+        && requiredText(request.resource.data.applicantName, 40)
+        && requiredText(request.resource.data.phone, 20)
+        && request.resource.data.parentAge in ['60대', '70대', '80대', '90대 이상', '기타']
+        && request.resource.data.region in ['대전 동구', '대전 중구', '대전 서구', '대전 유성구', '대전 대덕구', '기타']
+        && textOk(request.resource.data.regionDetail, 100)
+        && request.resource.data.products is list
+        && request.resource.data.products.size() > 0
+        && request.resource.data.products.hasOnly(['인터뷰 영상', '생애 기록 책', '3D 피규어 실사형', '3D 피규어 캐릭터형', '상담 후 결정'])
+        && requiredText(request.resource.data.preferredTime, 100)
+        && textOk(request.resource.data.message, 2000)
+        && request.resource.data.consent == true
+        && request.resource.data.status == '접수'
+        && request.resource.data.adminMemo == '';
+
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'adminMemo', 'updatedAt'])
+        && request.resource.data.status in ['접수', '상담 중', '촬영 예정', '제작 중', '전달 완료', '취소']
+        && textOk(request.resource.data.adminMemo, 1000)
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------- 사전 질문지 ----------
+    match /stories/{storyId} {
+      allow read: if isAdmin() || isOwner();
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'applicantName', 'daily', 'keepStory', 'questions',
+             'photoNote', 'photoCount', 'consent', 'createdAt'])
+        && stampedByMe()
+        && requiredText(request.resource.data.applicantName, 40)
+        && textOk(request.resource.data.daily, 2000)
+        && textOk(request.resource.data.keepStory, 2000)
+        && textOk(request.resource.data.questions, 2000)
+        && textOk(request.resource.data.photoNote, 1000)
+        && request.resource.data.photoCount is int
+        && request.resource.data.photoCount >= 0
+        && request.resource.data.photoCount <= 10
+        && request.resource.data.consent == true;
+
+      allow delete: if isAdmin();
+
+      // 사진은 한 장씩 따로 저장합니다. (문서 한 개는 1MiB를 넘을 수 없습니다)
+      // 문서 이름은 p0 ~ p9이고 자리마다 한 번만 만들 수 있어서 정해진 장수보다 더 올릴 수 없습니다.
+      match /photos/{photoId} {
+        function myStoryHasRoom() {
+          let story = get(/databases/$(database)/documents/stories/$(storyId));
+          return story.data.uid == request.auth.uid
+            && request.resource.data.order < story.data.photoCount;
+        }
+
+        allow read: if isAdmin() || isOwner();
+
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['uid', 'dataUrl', 'name', 'width', 'height', 'order', 'createdAt'])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.dataUrl is string
+          && request.resource.data.dataUrl.size() < 1000000
+          && request.resource.data.dataUrl.matches('data:image/jpeg;base64,[A-Za-z0-9+/=]+')
+          && textOk(request.resource.data.name, 100)
+          && request.resource.data.width is int
+          && request.resource.data.height is int
+          && request.resource.data.order is int
+          && request.resource.data.order >= 0
+          && photoId == 'p' + string(request.resource.data.order)
+          && myStoryHasRoom();
+
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ---------- 문의 ----------
+    match /inquiries/{inquiryId} {
+      allow read: if isAdmin() || isOwner();
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'name', 'title', 'body', 'answer', 'createdAt'])
+        && stampedByMe()
+        && requiredText(request.resource.data.name, 40)
+        && requiredText(request.resource.data.title, 100)
+        && requiredText(request.resource.data.body, 2000)
+        && request.resource.data.answer == '';
+
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answer', 'answeredAt'])
+        && requiredText(request.resource.data.answer, 2000)
+        && request.resource.data.answeredAt == request.time;
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------- 가족 영상 페이지 ----------
+    // 주소(id)를 아는 사람은 한 개를 열 수 있고, 목록은 관리자만 볼 수 있습니다.
+    match /families/{familyId} {
+      allow get: if true;
+      allow list: if isAdmin();
+
+      allow create: if isAdmin()
+        && familyId.matches('[a-z0-9]{12}')
+        && request.resource.data.keys().hasOnly(['title', 'youtubeId', 'message', 'createdAt'])
+        && requiredText(request.resource.data.title, 100)
+        && (request.resource.data.youtubeId == '' || request.resource.data.youtubeId.matches('[A-Za-z0-9_-]{11}'))
+        && textOk(request.resource.data.message, 1000)
+        && request.resource.data.createdAt == request.time;
+
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -5,6 +5,12 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
-# 가족 영상 페이지는 검색에 잡히지 않게 합니다. (페이지 안의 noindex와 함께 이중으로 막습니다)
-/family/*
+# 가족 영상 · 마이페이지 · 관리자 페이지는 검색에 잡히지 않게 합니다. (페이지 안의 noindex와 함께 이중으로 막습니다)
+/family*
+  X-Robots-Tag: noindex, nofollow
+
+/mypage*
+  X-Robots-Tag: noindex, nofollow
+
+/admin*
   X-Robots-Tag: noindex, nofollow

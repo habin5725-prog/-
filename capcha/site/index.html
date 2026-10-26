@@ -7,12 +7,13 @@
   <meta name="description" content="캡챠는 어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드리는 서비스입니다. 대전에서 시범 제작 중입니다.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="캡챠(CAPCHA) | 찾아가는 인생 이야기 인터뷰">
-  <meta property="og:description" content="어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드립니다.">
+  <meta property="og:description" content="캡챠는 어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드리는 서비스입니다. 대전에서 시범 제작 중입니다.">
   <meta name="theme-color" content="#222222">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/noto-serif-kr-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -29,7 +30,7 @@
           <li><a href="#results">결과물</a></li>
           <li><a href="#process">진행 과정</a></li>
           <li><a href="#faq">자주 묻는 질문</a></li>
-          <li><a href="apply.html">신청 안내</a></li>
+          <li><a href="apply.html">신청하기</a></li>
         </ul>
       </nav>
     </div>
@@ -43,20 +44,19 @@
       <div class="hero hero-slides on-dark" aria-live="off">
         <div class="hero-slide is-active" id="hero-slide-1" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-1">
           <div class="media media-cover media-dim">
-            <!-- 사진 자리: 실제 사진으로 바꿀 때 아래 div를 <img src="images/hero-1.jpg" alt="..." width="1600" height="900">로 교체 -->
-            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 어르신 댁에서 인터뷰하는 장면">[어르신 댁 거실에서 인터뷰하는 장면 · 1600x900]</div>
+            <img src="images/hero-interview.svg" alt="" width="1600" height="900">
           </div>
           <div class="hero-content">
             <p class="eyebrow" lang="en">Life Story Interview</p>
             <h2 class="hero-title" lang="en">Every Life<br>Is a Story</h2>
             <p class="hero-text">어르신 댁에 직접 찾아가 인생 이야기를 듣습니다.<br>그 이야기를 영상과 책으로 남겨 드립니다.</p>
-            <a class="btn btn-light" href="apply.html">신청 안내 보기 <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-light" href="apply.html">신청하기 <span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </div>
 
         <div class="hero-slide" id="hero-slide-2" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-2">
           <div class="media media-cover media-dim">
-            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 카메라 앞에서 이야기하는 어르신">[카메라 앞에서 이야기하는 어르신 · 1600x900]</div>
+            <img src="images/hero-speaking.svg" alt="" width="1600" height="900">
           </div>
           <div class="hero-content">
             <p class="eyebrow" lang="en">Interview Film</p>
@@ -68,7 +68,7 @@
 
         <div class="hero-slide" id="hero-slide-3" role="tabpanel" aria-roledescription="slide" aria-labelledby="hero-tab-3">
           <div class="media media-cover media-dim">
-            <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 펼쳐 놓은 생애 기록 책과 QR">[펼쳐 놓은 생애 기록 책과 QR · 1600x900]</div>
+            <img src="images/hero-book.svg" alt="" width="1600" height="900">
           </div>
           <div class="hero-content">
             <p class="eyebrow" lang="en">Life Story Book</p>
@@ -106,7 +106,7 @@
       </div>
     </section>
 
-    <!-- 왜 캡챠인가: 차별점이 정해지면 [차별점 1~3]을 바꿔 주세요. 문장 예시는 README에 있습니다. -->
+    <!-- 왜 캡챠인가 (확정 전 문장 · README에서 바꾸는 법 안내) -->
     <section class="section" id="why" aria-labelledby="why-title">
       <div class="container">
         <div class="sec-head reveal">
@@ -117,31 +117,28 @@
         <ul class="why-list">
           <li class="why-item reveal">
             <span class="why-num" lang="en" aria-hidden="true">01</span>
-            <!-- 예시: 어르신 댁으로 찾아갑니다 / 익숙한 집에서 편하게 이야기를 나눕니다. -->
-            <h3>[차별점 1]</h3>
-            <p>[차별점 1 설명 문장]</p>
+            <h3>어르신 댁으로 찾아갑니다</h3>
+            <p>익숙한 집에서 편하게 이야기를 나눕니다.</p>
           </li>
           <li class="why-item reveal">
             <span class="why-num" lang="en" aria-hidden="true">02</span>
-            <!-- 예시: 자녀의 질문을 인터뷰에 담습니다 / 사전 질문지로 자녀가 부모님께 묻고 싶은 질문을 미리 받습니다. -->
-            <h3>[차별점 2]</h3>
-            <p>[차별점 2 설명 문장]</p>
+            <h3>자녀의 질문을 인터뷰에 담습니다</h3>
+            <p>사전 질문지로 자녀가 부모님께 묻고 싶은 질문을 미리 받습니다.</p>
           </li>
           <li class="why-item reveal">
             <span class="why-num" lang="en" aria-hidden="true">03</span>
-            <!-- 예시: 글과 목소리를 함께 남깁니다 / 책 속 QR을 찍으면 인터뷰 영상이 열립니다. -->
-            <h3>[차별점 3]</h3>
-            <p>[차별점 3 설명 문장]</p>
+            <h3>글과 목소리를 함께 남깁니다</h3>
+            <p>책 속 QR을 찍으면 인터뷰 영상이 열립니다.</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- 결과물 3가지: 어두운 사진 띠 위에 카드 3장을 겹쳐 놓은 구간 -->
+    <!-- 결과물 3가지: 어두운 그림 띠 위에 카드 3장을 겹쳐 놓은 구간 -->
     <section class="results" id="results" aria-labelledby="results-title">
       <div class="band on-dark">
         <div class="media media-cover media-dim">
-          <div class="ph ph-dark ph-corner ph-top" role="img" aria-label="사진 준비 중: 부모님과 자녀가 함께 옛 앨범을 보는 장면">[부모님과 자녀가 함께 옛 앨범을 보는 장면 · 1920x800]</div>
+          <img src="images/band-album.svg" alt="" width="1920" height="800">
         </div>
         <div class="container band-inner">
           <div class="sec-head reveal">
@@ -155,7 +152,7 @@
       <div class="container cards">
         <article class="card reveal">
           <div class="media">
-            <div class="ph" role="img" aria-label="사진 준비 중: 인터뷰 영상의 한 장면">[인터뷰 영상의 한 장면 · 1200x800]</div>
+            <img src="images/card-video.svg" alt="인터뷰 영상 화면 속 어르신 그림" width="1200" height="800" loading="lazy">
           </div>
           <div class="card-body">
             <span class="card-num" lang="en">01</span>
@@ -169,7 +166,7 @@
 
         <article class="card reveal">
           <div class="media">
-            <div class="ph" role="img" aria-label="사진 준비 중: 펼쳐 놓은 생애 기록 책">[펼쳐 놓은 생애 기록 책 · 1200x800]</div>
+            <img src="images/card-book.svg" alt="표지와 QR이 있는 생애 기록 책 그림" width="1200" height="800" loading="lazy">
           </div>
           <div class="card-body">
             <span class="card-num" lang="en">02</span>
@@ -183,7 +180,7 @@
 
         <article class="card reveal">
           <div class="media">
-            <div class="ph" role="img" aria-label="사진 준비 중: 실사형과 캐릭터형 3D 피규어">[실사형 · 캐릭터형 3D 피규어 · 1200x800]</div>
+            <img src="images/card-figure.svg" alt="실사형과 캐릭터형 할머니 3D 피규어 그림" width="1200" height="800" loading="lazy">
           </div>
           <div class="card-body">
             <span class="card-num" lang="en">03</span>
@@ -210,8 +207,8 @@
             <span class="step-num" lang="en" aria-hidden="true">01</span>
             <div>
               <h3 class="step-title">신청</h3>
-              <p>신청서를 남겨 주시면 상담 후 일정과 가격을 안내합니다.</p>
-              <a class="text-link" href="apply.html">신청 안내 보기 <span aria-hidden="true">→</span></a>
+              <p>구글 계정으로 로그인해 신청서를 남기시면 상담 후 일정과 가격을 안내합니다.</p>
+              <a class="text-link" href="apply.html">신청하기 <span aria-hidden="true">→</span></a>
             </div>
           </li>
           <li class="step reveal">
@@ -225,7 +222,7 @@
                 <li>자녀가 부모님께 묻고 싶은 질문</li>
                 <li>옛 사진</li>
               </ul>
-              <a class="text-link" href="story-form.html">사전 질문지 안내 보기 <span aria-hidden="true">→</span></a>
+              <a class="text-link" href="story-form.html">사전 질문지 작성하기 <span aria-hidden="true">→</span></a>
             </div>
           </li>
           <li class="step reveal">
@@ -253,7 +250,7 @@
             <span class="step-num" lang="en" aria-hidden="true">06</span>
             <div>
               <h3 class="step-title">전달</h3>
-              <p>완성한 영상과 책을 가족께 전달합니다.</p>
+              <p>완성한 영상과 책을 가족께 전달합니다. 진행 상황은 마이페이지에서 볼 수 있습니다.</p>
             </div>
           </li>
           <li class="step reveal">
@@ -282,9 +279,16 @@
             </div>
           </details>
           <details class="faq-item">
+            <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">로그인을 꼭 해야 하나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+            <div class="faq-answer">
+              <p>둘러보기는 로그인 없이 할 수 있습니다.</p>
+              <p>신청서 · 사전 질문지 · 문의는 구글 계정으로 로그인한 뒤 작성할 수 있습니다. 내가 남긴 내용과 진행 상황은 마이페이지에서 볼 수 있습니다.</p>
+            </div>
+          </details>
+          <details class="faq-item">
             <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">어느 지역에서 이용할 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
             <div class="faq-answer">
-              <p>대전에서 먼저 시작합니다. 다른 지역은 <a href="mailto:[이메일]">[이메일]</a>로 문의해 주세요.</p>
+              <p>대전에서 먼저 시작합니다. 다른 지역은 <a href="contact.html">문의하기</a>로 남겨 주세요.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -298,14 +302,14 @@
             <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">사전 질문지는 무엇인가요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
             <div class="faq-answer">
               <p>인터뷰 전에 작성하는 질문지입니다. 부모님의 사소한 일상 · 간직하고 싶은 이야기 · 자녀가 부모님께 묻고 싶은 질문 · 옛 사진을 받습니다.</p>
-              <p><a href="story-form.html">사전 질문지 안내 보기</a></p>
+              <p><a href="story-form.html">사전 질문지 작성하기</a></p>
             </div>
           </details>
           <details class="faq-item">
             <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">옛 사진은 어떻게 보내나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
             <div class="faq-answer">
-              <p>사전 질문지(구글 설문지)에 올리거나 <a href="mailto:[이메일]">[이메일]</a>로 보내 주세요.</p>
-              <p>구글 설문지에서 파일을 올리려면 구글 계정 로그인이 필요합니다.</p>
+              <p>사전 질문지에서 사진을 바로 올릴 수 있습니다. 한 번에 최대 10장이며 사진은 자동으로 줄여서 올립니다.</p>
+              <p>사진이 많거나 올라가지 않으면 <a href="contact.html">문의하기</a>로 알려 주세요.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -324,7 +328,7 @@
           <details class="faq-item">
             <summary><span class="faq-q" lang="en" aria-hidden="true">Q</span><span class="faq-text">촬영 시간과 제작 기간은 얼마나 걸리나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
             <div class="faq-answer">
-              <p>[촬영 시간 · 제작 기간]</p>
+              <p>상담 때 일정과 함께 안내합니다.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -340,15 +344,15 @@
     <!-- 신청 버튼 띠 -->
     <section class="cta on-dark" aria-labelledby="cta-title">
       <div class="media media-cover media-dim">
-        <div class="ph ph-dark ph-corner" role="img" aria-label="사진 준비 중: 두 손으로 옛 사진을 든 모습">[두 손으로 옛 사진을 든 모습 · 1920x800]</div>
+        <img src="images/cta-shelf.svg" alt="" width="1920" height="800" loading="lazy">
       </div>
       <div class="container cta-inner">
         <div class="sec-head reveal">
           <p class="eyebrow" lang="en">Apply</p>
-          <h2 class="sec-title" id="cta-title"><span class="en" lang="en">Begin the Story</span><span class="ko">신청 안내</span></h2>
+          <h2 class="sec-title" id="cta-title"><span class="en" lang="en">Begin the Story</span><span class="ko">신청하기</span></h2>
           <p class="sec-desc">지금은 시범 제작 단계입니다.<br>신청서를 남겨 주시면 상담 후 일정과 가격을 안내합니다.</p>
         </div>
-        <a class="btn btn-light btn-lg reveal" href="apply.html">신청 안내 보기 <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-light btn-lg reveal" href="apply.html">신청서 작성하기 <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
@@ -357,9 +361,10 @@
     <a class="to-top" href="#top" lang="en" aria-label="맨 위로">TOP</a>
     <p class="footer-logo" lang="en">CAPCHA</p>
     <ul class="footer-links">
-      <li><a class="is-strong" href="[처리방침 주소]">개인정보 처리방침</a></li>
-      <li><a href="mailto:[이메일]">문의 [이메일]</a></li>
-      <li><a href="story-form.html">사전 질문지 안내</a></li>
+      <li><a class="is-strong" href="privacy.html">개인정보 처리방침</a></li>
+      <li><a href="contact.html">문의하기</a></li>
+      <li><a href="story-form.html">사전 질문지</a></li>
+      <li><a href="mypage.html">마이페이지</a></li>
     </ul>
     <p class="footer-note">캡챠(CAPCHA)는 보안문자 CAPTCHA와 관련이 없습니다. 대전에서 시범 제작 중입니다.</p>
     <p class="copyright">© 2026 캡챠(CAPCHA). All rights reserved.</p>
