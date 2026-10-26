@@ -3,7 +3,7 @@
 어르신 댁에 직접 찾아가 인생 이야기를 인터뷰하고 영상과 책으로 남겨 드리는 서비스의 소개 사이트입니다.
 HTML · CSS · 순수 JavaScript로만 만든 정적 사이트이며 빌드 과정이 없습니다.
 
-이 문서는 사이트 주인이 읽는 안내서입니다. Cloudflare Pages에는 `site` 폴더만 올리므로 이 문서와 `tools` 폴더는 인터넷에 공개되지 않습니다.
+이 문서는 사이트 주인이 읽는 안내서입니다. Cloudflare Pages나 Vercel에는 `site` 폴더만 올리므로 이 문서와 `tools` 폴더는 인터넷에 공개되지 않습니다.
 
 ---
 
@@ -14,7 +14,7 @@ capcha/
 ├── README.md              이 문서 (올리지 않음)
 ├── tools/
 │   └── family-id.html     가족 영상 페이지 이름 만들기 도구 (내 컴퓨터에서만 사용 · 올리지 않음)
-└── site/                  ← Cloudflare Pages에 올리는 폴더
+└── site/                  ← Cloudflare Pages나 Vercel에 올리는 폴더
     ├── index.html         메인
     ├── apply.html         신청 안내
     ├── story-form.html    사전 질문지 안내
@@ -25,7 +25,8 @@ capcha/
     ├── js/main.js         첫 화면 슬라이드 · 서서히 나타나기
     ├── fonts/             Paperlogy 3종 · Noto Serif KR 라틴 부분 · 라이선스 2종
     ├── favicon.svg        브라우저 탭 아이콘
-    └── _headers           Cloudflare Pages 응답 헤더 설정
+    ├── _headers           Cloudflare Pages 응답 헤더 설정
+    └── vercel.json        Vercel 응답 헤더 · 주소 설정
 ```
 
 메인 페이지 순서는 첫 화면(슬라이드 3장) → 탭 3개와 진행 막대 → 왜 캡챠인가 → 결과물 3가지 → 진행 과정 → 자주 묻는 질문 → 신청 버튼입니다.
@@ -56,8 +57,8 @@ Python이 없다는 메시지가 나오면 VS Code의 Live Server 확장 기능�
 
 `site/index.html`을 더블클릭해도 대부분의 화면은 보입니다. 다만 아래 두 가지는 이 방법으로 확인할 수 없습니다.
 
-- 가족 영상 페이지의 유튜브 영상: 유튜브 삽입 영상은 HTTP Referer 정보가 없으면 153 오류를 냅니다. 파일로 연 페이지는 이 정보를 보내지 않으므로 영상이 나오지 않을 수 있습니다. (추측입니다. 근거는 10장의 153 오류 자료입니다.)
-- 404 페이지와 `_headers` 설정: Cloudflare Pages에 올린 뒤에만 동작합니다.
+- 가족 영상 페이지의 유튜브 영상: 유튜브 삽입 영상은 HTTP Referer 정보가 없으면 153 오류를 냅니다. 파일로 연 페이지는 이 정보를 보내지 않으므로 영상이 나오지 않을 수 있습니다. (추측입니다. 근거는 11장의 153 오류 자료입니다.)
+- 404 페이지와 `_headers` · `vercel.json` 설정: Cloudflare Pages나 Vercel에 올린 뒤에만 동작합니다.
 
 ---
 
@@ -202,14 +203,14 @@ Python이 없다는 메시지가 나오면 VS Code의 Live Server 확장 기능�
    - 도구를 쓰지 않을 때도 이름 · 생일 · 전화번호처럼 추측할 수 있는 정보는 넣지 않습니다.
 4. `site/family/sample.html`을 복사해서 `site/family/만든이름.html`로 저장합니다. (예: `site/family/k7m2q9x4w8pd.html`)
 5. 복사한 파일에서 `[유튜브 ID]` 3곳과 `[영상 제목]` 3곳을 바꿉니다. `noindex` 줄은 지우지 않습니다.
-6. 6장 순서로 사이트를 다시 올립니다.
-7. QR 코드에는 `https://사이트주소/family/만든이름` 을 넣습니다. Cloudflare Pages는 `.html`로 끝나는 주소를 `.html` 없는 주소로 넘겨 주므로 두 주소 모두 열립니다.
+6. 6장(Cloudflare Pages)이나 7장(Vercel) 순서로 사이트를 다시 올립니다.
+7. QR 코드에는 `https://사이트주소/family/만든이름` 을 넣습니다. Cloudflare Pages와 Vercel(vercel.json 설정) 모두 `.html`로 끝나는 주소를 `.html` 없는 주소로 넘겨 주므로 두 주소 모두 열립니다.
 8. 휴대폰으로 QR을 찍어 영상이 나오는지 확인한 뒤 책에 넣습니다.
 
 ### 5-2. 알고 있어야 할 점
 
 - 일부 공개 영상은 링크를 아는 사람이면 누구나 보고 공유할 수 있습니다. 완전한 비공개가 아닙니다. 사이트 문구에도 이 내용을 적어 두었습니다.
-- 가족 페이지는 두 겹으로 검색에서 뺐습니다. 페이지 안의 `<meta name="robots" content="noindex, nofollow">`와 `_headers`의 `X-Robots-Tag` 헤더입니다.
+- 가족 페이지는 두 겹으로 검색에서 뺐습니다. 페이지 안의 `<meta name="robots" content="noindex, nofollow">`와 `_headers`(Cloudflare) · `vercel.json`(Vercel)의 `X-Robots-Tag` 헤더입니다.
 - `robots.txt`로 family 폴더를 막지 않습니다. 검색 로봇이 페이지를 읽지 못하면 noindex도 읽지 못해서 오히려 검색 결과에 주소가 나올 수 있습니다.
 - 사이트의 다른 페이지에는 가족 페이지 링크를 걸지 않습니다. 지금도 걸려 있지 않습니다.
 - 영상은 유튜브 개인정보 보호 강화 모드 주소(`youtube-nocookie.com`)로 넣었습니다. 이 모드는 삽입 영상 시청 기록이 유튜브 맞춤 추천 등에 영향을 주지 않게 하는 기능입니다. 유튜브 쪽 쿠키나 기록이 전혀 없다는 뜻인지는 확실하지 않습니다.
@@ -240,7 +241,7 @@ Cloudflare 화면의 메뉴 이름은 바뀔 수 있습니다. 아래는 2026년
 
 ### 6-3. 알아 둘 점
 
-- 끌어다 놓기 업로드는 파일 1,000개 · 파일 하나당 25MiB까지 받습니다. 지금 `site` 폴더는 파일 15개 · 약 2.1MB입니다.
+- 끌어다 놓기 업로드는 파일 1,000개 · 파일 하나당 25MiB까지 받습니다. 지금 `site` 폴더는 파일 16개 · 약 2.1MB입니다.
 - 직접 업로드(Direct Upload)로 만든 프로젝트는 나중에 Git 연동 방식으로 바꿀 수 없습니다. Git 연동을 원하면 새 프로젝트를 만들어야 합니다.
 - 맨 위에 `404.html`이 없으면 Cloudflare Pages는 사이트를 한 페이지짜리 앱으로 보고 없는 주소에도 첫 화면을 보여 줍니다. 그래서 `404.html`을 넣었습니다.
 - `_headers` 파일은 사이트 폴더 맨 위에 두면 Cloudflare Pages가 읽고 방문자에게는 파일로 보이지 않습니다.
@@ -250,9 +251,63 @@ Cloudflare 화면의 메뉴 이름은 바뀔 수 있습니다. 아래는 2026년
 - 내 도메인을 연결하려면 프로젝트의 Custom domains 메뉴를 씁니다. (선택)
 - GitHub Pages를 쓰지 않는 이유: GitHub 문서는 GitHub Pages를 온라인 사업 운영용 무료 호스팅으로 쓰는 것을 허용하지 않는다고 적고 있습니다.
 
+## 7. Vercel에 올리는 순서
+
+### 7-1. 먼저 확인할 점: 무료(Hobby) 플랜은 비상업 개인 용도만
+
+- Vercel 무료 플랜(Hobby)은 비상업 개인 용도로만 쓸 수 있습니다. 상업 용도로 쓰려면 Pro 이상 플랜이 필요합니다.
+- Vercel 공정 사용 지침은 상품이나 서비스 광고 · 방문자에게 결제 받기 · 돈을 받고 사이트를 만들거나 호스팅하는 경우를 상업 용도로 봅니다.
+- 캡챠 소개 사이트는 서비스를 알리는 사이트라 상업 용도에 해당할 가능성이 큽니다. (추측입니다. 최종 판단은 Vercel 약관을 직접 확인해 주세요.)
+- Pro 플랜은 월 20달러이며 배포 권한 좌석 1개가 들어 있습니다. 14일 체험이 있습니다.
+- Hobby 플랜을 상업 용도로 쓰면 Vercel이 배포를 일시 정지할 수 있습니다.
+
+### 7-2. 방법 A: Vercel Drop (끌어다 놓기 · 가장 쉬움)
+
+1. 브라우저에서 `https://vercel.com/drop` 을 엽니다.
+2. Vercel 계정으로 로그인합니다. 로그인하지 않아도 올릴 수 있지만 정해진 시간 안에 계정으로 가져오지(claim) 않으면 사라집니다.
+3. 팀과 프로젝트 이름을 고릅니다. (예: `capcha`)
+4. `capcha/site` 폴더를 끌어다 놓습니다. zip 파일도 받습니다.
+5. 배포가 끝나면 나오는 주소로 첫 화면이 열리는지 확인합니다. 기본 주소는 `프로젝트이름.vercel.app` 형식입니다.
+
+Vercel Drop은 기존 프로젝트에 다시 배포하지 않습니다. 고친 뒤 다시 끌어다 놓으면 새 프로젝트가 생깁니다. 계속 고쳐 올릴 계획이면 방법 B나 방법 C가 편합니다.
+
+### 7-3. 방법 B: Vercel CLI (터미널 · 다시 올리기 쉬움)
+
+1. Node.js(LTS 버전)를 설치합니다.
+2. 터미널에서 Vercel CLI를 설치하고 로그인합니다.
+   ```
+   npm i -g vercel
+   vercel login
+   ```
+3. `capcha/site` 폴더로 이동해서 배포합니다.
+   ```
+   cd 내려받은위치/capcha/site
+   vercel --prod
+   ```
+4. 처음 실행하면 질문이 나옵니다. 새 프로젝트를 만들고 이름을 적습니다. 빌드 설정은 바꾸지 않습니다.
+5. 고친 뒤에는 같은 폴더에서 `vercel --prod` 를 다시 실행합니다.
+
+### 7-4. 방법 C: GitHub 저장소 연동 (push하면 자동 배포)
+
+1. Vercel 대시보드에서 Add New → Project를 누르고 GitHub 저장소 `habin5725-prog/-` 를 가져옵니다.
+2. Root Directory를 `capcha/site` 로 정합니다. 이 저장소 맨 위에는 다른 프로젝트(야자 관리)가 있으므로 꼭 정해야 합니다.
+3. Framework Preset은 Other로 두고 Build Command는 비워 둡니다.
+4. 이 저장소의 기본 브랜치는 `claude/exciting-dijkstra-evmx15` 이고 사이트는 `claude/awesome-galileo-n6soq7` 브랜치에 있습니다. 운영 배포 브랜치를 사이트가 있는 브랜치로 바꾸거나 두 브랜치를 합쳐야 운영 주소에 사이트가 나옵니다.
+
+### 7-5. Vercel에서 알아 둘 점
+
+- `site/vercel.json` 이 Vercel 설정 파일입니다. 두 가지를 정했습니다.
+  - `cleanUrls`: `apply.html` 같은 주소를 `.html` 없는 주소(`/apply`)로 넘겨 줍니다. QR에 `.html` 없는 주소를 넣어도 됩니다.
+  - `headers`: 가족 영상 페이지에 `X-Robots-Tag: noindex, nofollow` 를 붙이고 모든 페이지에 기본 보안 헤더를 붙입니다.
+- Vercel Drop이 `vercel.json` 을 그대로 읽는지는 확실하지 않습니다. 가족 페이지는 페이지 안의 noindex 표시만으로도 검색 제외 요청이 됩니다.
+- Vercel은 사이트 폴더 맨 위의 `404.html` 을 없는 주소용 페이지로 씁니다.
+- Vercel은 미리보기 배포 주소에 자동으로 noindex 헤더를 붙입니다.
+- `_headers` 는 Cloudflare Pages 전용 설정 파일입니다. Vercel에서는 `vercel.json` 을 씁니다.
+- Web Analytics · Speed Insights 같은 방문자 분석 기능은 켜지 않습니다.
+
 ---
 
-## 7. 이 사이트가 하지 않는 것
+## 8. 이 사이트가 하지 않는 것
 
 - 결제 · 회원가입 · 로그인 기능이 없습니다.
 - 입력 칸이 없습니다. 이름 · 연락처 · 사진을 사이트 안에 저장하거나 외부로 보내지 않습니다. 신청과 질문지는 구글 설문지 링크로만 받습니다.
@@ -263,14 +318,14 @@ Cloudflare 화면의 메뉴 이름은 바뀔 수 있습니다. 아래는 2026년
 
 ---
 
-## 8. 디자인과 접근성 메모
+## 9. 디자인과 접근성 메모
 
-### 8-1. 참고 사이트에서 빌린 것과 빌리지 않은 것
+### 9-1. 참고 사이트에서 빌린 것과 빌리지 않은 것
 
 - 빌린 것은 레이아웃 느낌뿐입니다. 꽉 찬 사진 위 어두운 덮개 · 가운데 흰 글씨 · 양옆 가는 선의 영문 대문자 문구 · 큰 세리프 영문 제목 · 테두리만 있는 둥근 버튼 · 가운데 로고와 아래 가로 메뉴 · 첫 화면 아래 탭 3개와 얇은 진행 막대 · 넓은 여백 · 흰색과 옅은 회색 번갈아 쓰기 · 어두운 사진 띠 위에 겹친 카드 · 가운데 정렬 하단과 둥근 TOP 버튼입니다.
 - 로고 · 사진 · 문구 · 코드 · 브랜드명은 가져오지 않았습니다. 모든 문구와 코드는 새로 썼습니다.
 
-### 8-2. 색과 글자 대비
+### 9-2. 색과 글자 대비
 
 WCAG 기준은 일반 글자 4.5:1 이상입니다. 아래 수치는 WCAG 공식 계산식으로 직접 계산했습니다.
 
@@ -284,7 +339,7 @@ WCAG 기준은 일반 글자 4.5:1 이상입니다. 아래 수치는 WCAG 공식
 | #222 글자 / 앰버 #D9A066 바탕 | 6.95:1 → '선택' 표시에 사용 |
 | 흰 글자 / 가장 밝은 사진 위 60% 덮개 | 5.74:1 이상 |
 
-### 8-3. 움직임과 키보드
+### 9-3. 움직임과 키보드
 
 - 움직임은 서서히 나타나기와 슬라이드 페이드뿐입니다. 운영체제의 움직임 줄이기 설정을 켜면 모두 꺼지고 슬라이드도 자동으로 넘어가지 않습니다.
 - 첫 화면 슬라이드는 7초마다 넘어가며 오른쪽 둥근 버튼으로 멈출 수 있습니다. 마우스를 올리거나 키보드로 들어오면 멈춥니다. 간격은 `css/style.css`의 `--hero-interval`에서 바꿉니다.
@@ -293,7 +348,7 @@ WCAG 기준은 일반 글자 4.5:1 이상입니다. 아래 수치는 WCAG 공식
 
 ---
 
-## 9. 글꼴과 라이선스
+## 10. 글꼴과 라이선스
 
 | 글꼴 | 쓰는 곳 | 파일 | 라이선스 |
 |---|---|---|---|
@@ -305,7 +360,7 @@ WCAG 기준은 일반 글자 4.5:1 이상입니다. 아래 수치는 WCAG 공식
 
 ---
 
-## 10. 확인한 자료 출처
+## 11. 확인한 자료 출처
 
 이 세션의 네트워크 정책 때문에 아래 공식 문서 일부는 직접 열지 못하고 검색 결과의 요약과 인용으로 확인했습니다. 운영 전에 한 번 더 직접 열어 보기를 권합니다.
 
@@ -321,6 +376,17 @@ Cloudflare Pages
 - [Serving Pages](https://developers.cloudflare.com/pages/configuration/serving-pages/) : 404.html · 한 페이지 앱 처리 · .html 주소 넘김
 - [Headers](https://developers.cloudflare.com/pages/configuration/headers/) : `_headers` 문법 · 미리보기 noindex
 - [Get started (Pages)](https://developers.cloudflare.com/pages/get-started/) : Workers 권장 안내
+
+Vercel
+- [Vercel Hobby Plan](https://vercel.com/docs/plans/hobby) · [Fair Use Guidelines](https://vercel.com/docs/limits/fair-use-guidelines) : 무료 플랜 비상업 용도 제한 · 상업 용도의 범위
+- [Vercel Pricing](https://vercel.com/pricing) · [Pro Plan](https://vercel.com/docs/plans/pro-plan) : Pro 월 20달러 · 14일 체험
+- [Why has my account or deployment been paused?](https://vercel.com/kb/guide/why-is-my-account-deployment-blocked) : 배포 일시 정지 사유
+- [Deploying with Vercel Drop](https://vercel.com/docs/drop) : 끌어다 놓기 배포 · 다시 배포 불가
+- [Deploying a project from the CLI](https://vercel.com/docs/projects/deploy-from-cli) · [vercel deploy](https://vercel.com/docs/cli/deploy) : CLI 배포
+- [Using Monorepos](https://vercel.com/docs/monorepos) : Root Directory 설정
+- [Static Configuration with vercel.json](https://vercel.com/docs/project-configuration/vercel-json) : cleanUrls · headers
+- [Custom 404 Page](https://vercel.com/kb/guide/custom-404-page) : 404.html 자동 사용
+- [Are Vercel Preview Deployments indexed by search engines?](https://vercel.com/kb/guide/are-vercel-preview-deployment-indexed-by-search-engines) : 미리보기 noindex
 
 유튜브 · 검색
 - [Change video privacy settings · YouTube Help](https://support.google.com/youtube/answer/157177?hl=en) : 일부 공개의 뜻
