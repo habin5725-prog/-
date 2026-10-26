@@ -9,7 +9,7 @@
       ]
     },
     {
-      "source": "/family/(.*)",
+      "source": "/(family|mypage|admin)(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
