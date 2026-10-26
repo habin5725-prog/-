@@ -1,0 +1,10 @@
+# Cloudflare Pages가 읽는 응답 헤더 설정 파일입니다. 사이트 주소로는 열리지 않습니다.
+
+# 모든 페이지
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 가족 영상 페이지는 검색에 잡히지 않게 합니다. (페이지 안의 noindex와 함께 이중으로 막습니다)
+/family/*
+  X-Robots-Tag: noindex, nofollow
