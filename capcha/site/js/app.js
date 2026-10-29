@@ -25,6 +25,9 @@ export const app = {
   signOut: signOut,
 };
 
+// 체험 · 운영 모드에 따라 문구를 바꿉니다. (.demo-only / .live-only)
+document.documentElement.classList.add(mode === 'demo' ? 'is-demo' : 'is-live');
+
 app.ready = (async function () {
   if (mode === 'demo') showDemoBar();
   try {
@@ -51,9 +54,9 @@ function showDemoBar() {
   document.documentElement.classList.add('is-demo');
   const bar = h('aside', { class: 'demo-bar', 'aria-label': '체험 모드 안내' },
     h('p', null,
-      h('strong', { text: '체험 모드' }),
-      h('span', { class: 'demo-long', text: ' 실제 구글 로그인 연결 전입니다. 체험 계정으로 모든 화면을 둘러볼 수 있고 입력한 내용은 이 브라우저에만 저장됩니다.' }),
-      h('span', { class: 'demo-short', text: ' 입력한 내용은 이 브라우저에만 저장됩니다.' })
+      h('strong', { text: '체험판' }),
+      h('span', { class: 'demo-long', text: ' 화면 체험만 할 수 있습니다. 입력한 내용은 이 브라우저에만 저장되고 운영자에게 전송되지 않습니다. 다른 기기에서는 보이지 않고 브라우저 저장소를 지우면 사라지니 실제 개인정보 대신 예시 내용을 넣어 주세요.' }),
+      h('span', { class: 'demo-short', text: ' 입력 내용은 운영자에게 전송되지 않고 이 브라우저에만 저장됩니다. 예시 내용으로 체험해 주세요.' })
     )
   );
   document.body.prepend(bar);
@@ -72,8 +75,8 @@ function buildDialog() {
   const form = h('form', { method: 'dialog', class: 'login-form' },
     h('button', { class: 'dialog-close', value: 'cancel', 'aria-label': '닫기', type: 'submit' }, h('span', { 'aria-hidden': 'true', text: '×' })),
     h('p', { class: 'eyebrow', lang: 'en', text: 'Sign In' }),
-    h('h2', { id: 'login-title', class: 'login-title', text: '체험 계정으로 로그인' }),
-    h('p', { class: 'login-desc', text: '지금은 체험 모드입니다. Firebase를 연결하면 이 자리에 구글 로그인이 열립니다. 체험 계정으로 고객 화면과 관리자 화면을 모두 볼 수 있습니다.' }),
+    h('h2', { id: 'login-title', class: 'login-title', text: '체험 계정으로 둘러보기' }),
+    h('p', { class: 'login-desc', text: '체험판에는 실제 로그인이 없습니다. 아래 체험 계정 중 하나를 고르면 고객 화면이나 관리자 화면을 볼 수 있습니다. 입력한 내용은 운영자에게 전송되지 않습니다.' }),
     h('div', { class: 'login-choices' },
       h('button', { class: 'login-choice', value: 'customer', type: 'submit' },
         h('strong', { text: '고객으로 체험하기' }),

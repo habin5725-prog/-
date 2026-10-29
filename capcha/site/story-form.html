@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>사전 질문지 | 캡챠(CAPCHA)</title>
-  <meta name="description" content="인터뷰 전에 작성하는 캡챠 사전 질문지입니다. 부모님의 이야기와 옛 사진을 로그인 후 보낼 수 있습니다.">
+  <title>사전 질문지 | 캡챠 · 인생 이야기 기록</title>
+  <meta name="description" content="인터뷰 전에 작성하는 캡챠 사전 질문지입니다. 부모님의 이야기와 옛 사진을 보낼 수 있습니다.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="사전 질문지 | 캡챠(CAPCHA)">
-  <meta property="og:description" content="인터뷰 전에 작성하는 캡챠 사전 질문지입니다. 부모님의 이야기와 옛 사진을 로그인 후 보낼 수 있습니다.">
+  <meta property="og:site_name" content="캡챠 · 인생 이야기 기록">
+  <meta property="og:title" content="사전 질문지 | 캡챠 · 인생 이야기 기록">
+  <meta property="og:description" content="인터뷰 전에 작성하는 캡챠 사전 질문지입니다. 부모님의 이야기와 옛 사진을 보낼 수 있습니다.">
+  <meta property="og:url" content="https://habin5725-prog.github.io/-/capcha/site/story-form.html">
+  <meta property="og:image" content="https://habin5725-prog.github.io/-/capcha/site/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="theme-color" content="#222222">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/noto-serif-kr-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
   <script type="module" src="js/app.js"></script>
@@ -21,72 +25,41 @@
 
   <header class="site-header on-dark" id="top">
     <div class="header-inner">
-      <a class="logo" href="index.html" aria-label="캡챠 CAPCHA 처음 화면">
+      <a class="logo" href="index.html" aria-label="캡챠 인생 이야기 기록 처음 화면">
         <span class="logo-en" lang="en">CAPCHA</span>
-        <span class="logo-ko">캡챠</span>
+        <span class="logo-ko">캡챠 · 인생 이야기 기록</span>
       </a>
       <nav class="gnb" aria-label="주 메뉴">
         <ul>
           <li><a href="index.html#why">왜 캡챠인가</a></li>
           <li><a href="index.html#results">결과물</a></li>
+          <li><a href="index.html#guide">구성 · 안내</a></li>
           <li><a href="index.html#process">진행 과정</a></li>
           <li><a href="index.html#faq">자주 묻는 질문</a></li>
-          <li><a href="apply.html">신청하기</a></li>
+          <li><a href="apply.html"><span class="demo-only">신청 체험</span><span class="live-only">상담 신청</span></a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="page-hero on-dark" aria-labelledby="page-title">
+    <section class="page-hero on-dark page-hero-sm page-hero-work" aria-labelledby="page-title">
       <div class="media media-cover media-dim">
         <img src="images/story-photos.svg" alt="" width="1920" height="700">
       </div>
       <div class="page-hero-content">
         <p class="eyebrow" lang="en">Before the Interview</p>
-        <h1 class="sec-title" id="page-title"><span class="en" lang="en">Before We Meet</span><span class="ko">사전 질문지</span></h1>
-        <p class="sec-desc">인터뷰 전에 작성하는 질문지입니다.<br>적어 주신 내용으로 인터뷰를 준비합니다.</p>
+        <h1 class="sec-title" id="page-title"><span class="ko">사전 질문지</span></h1>
+        <p class="sec-desc"><span class="demo-only">체험판입니다. 입력한 내용과 사진은 운영자에게 전송되지 않습니다.<br></span>이야기 칸과 사진 중 하나 이상만 채우면 됩니다.<br><a href="#story-form">질문지 바로 작성 ↓</a></p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="items-title">
-      <div class="container">
-        <div class="sec-head reveal">
-          <p class="eyebrow" lang="en">Story Note</p>
-          <h2 class="sec-title" id="items-title"><span class="ko">질문지에 적는 내용</span></h2>
-          <p class="sec-desc">떠오르는 만큼 편하게 적어 주세요.</p>
-        </div>
-        <ul class="tile-grid tile-grid-4">
-          <li class="tile reveal">
-            <span class="tile-num" lang="en" aria-hidden="true">01</span>
-            <h3>부모님의 사소한 일상</h3>
-            <p>즐겨 드시는 음식이나 자주 하시는 말씀처럼 작은 일상을 적어 주세요.</p>
-          </li>
-          <li class="tile reveal">
-            <span class="tile-num" lang="en" aria-hidden="true">02</span>
-            <h3>간직하고 싶은 이야기</h3>
-            <p>가족이 오래 간직하고 싶은 부모님의 이야기를 적어 주세요.</p>
-          </li>
-          <li class="tile reveal">
-            <span class="tile-num" lang="en" aria-hidden="true">03</span>
-            <h3>자녀가 묻고 싶은 질문</h3>
-            <p>부모님께 여쭙고 싶었던 질문을 적어 주세요. 인터뷰 때 여쭙니다.</p>
-          </li>
-          <li class="tile reveal">
-            <span class="tile-num" lang="en" aria-hidden="true">04</span>
-            <h3>옛 사진</h3>
-            <p>책과 영상에 넣고 싶은 옛 사진을 올려 주세요. 종이 사진은 휴대폰으로 찍어 올리면 됩니다.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section bg-gray" id="story-form" aria-labelledby="form-title">
+    <section class="section" id="story-form" aria-labelledby="form-title">
       <div class="container">
         <div class="sec-head reveal">
           <p class="eyebrow" lang="en">Story Form</p>
-          <h2 class="sec-title" id="form-title"><span class="en" lang="en">Share Their Story</span><span class="ko">사전 질문지 작성</span></h2>
-          <p class="sec-desc">입력한 내용과 사진은 작성한 본인과 관리자만 볼 수 있습니다.</p>
+          <h2 class="sec-title" id="form-title"><span class="ko">사전 질문지 작성</span></h2>
+          <p class="sec-desc">적어 주신 내용으로 인터뷰를 준비합니다. 부모님이 원하지 않는 질문은 적지 않으셔도 됩니다.</p>
         </div>
         <div id="form-root">
           <p class="loading">사전 질문지를 불러오는 중입니다.</p>
@@ -105,7 +78,7 @@
       <li><a href="story-form.html" aria-current="page">사전 질문지</a></li>
       <li><a href="mypage.html">마이페이지</a></li>
     </ul>
-    <p class="footer-note">캡챠(CAPCHA)는 보안문자 CAPTCHA와 관련이 없습니다. 대전에서 시범 제작 중입니다.</p>
+    <p class="footer-note">캡챠 · 인생 이야기 기록 · 대전 시범 제작 단계<span class="demo-only"> · 지금은 화면 체험판입니다</span></p>
     <p class="copyright">© 2026 캡챠(CAPCHA). All rights reserved.</p>
   </footer>
 </body>

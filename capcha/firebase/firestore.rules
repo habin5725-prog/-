@@ -10,6 +10,7 @@ rules_version = '2';
 //
 // 정한 내용
 // - 누구나: 가족 영상 페이지 한 개를 주소(id)로 열기
+// - 로그인하지 않은 사람: 연락처를 남기는 문의 작성 (읽기는 불가)
 // - 로그인한 고객: 신청서 · 사전 질문지(사진 포함) · 문의 작성, 내가 쓴 것만 보기
 // - 관리자: 모든 기록 보기 · 진행 상태와 메모 바꾸기 · 문의 답변 · 가족 영상 페이지 만들기 · 삭제
 // - 위에 없는 읽기 · 쓰기는 모두 막힙니다.
@@ -57,20 +58,21 @@ service cloud.firestore {
 
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'applicantName', 'phone', 'parentAge', 'region',
-             'regionDetail', 'products', 'preferredTime', 'message', 'consent', 'status', 'adminMemo', 'createdAt', 'updatedAt'])
+             'regionDetail', 'products', 'preferredTime', 'message', 'consent', 'consentVersion', 'status', 'adminMemo', 'createdAt', 'updatedAt'])
         && stampedByMe()
         && request.resource.data.updatedAt == request.time
         && requiredText(request.resource.data.applicantName, 40)
         && requiredText(request.resource.data.phone, 20)
-        && request.resource.data.parentAge in ['60대', '70대', '80대', '90대 이상', '기타']
+        && request.resource.data.parentAge in ['', '60대', '70대', '80대', '90대 이상', '기타']
         && request.resource.data.region in ['대전 동구', '대전 중구', '대전 서구', '대전 유성구', '대전 대덕구', '기타']
         && textOk(request.resource.data.regionDetail, 100)
         && request.resource.data.products is list
         && request.resource.data.products.size() > 0
         && request.resource.data.products.hasOnly(['인터뷰 영상', '생애 기록 책', '3D 피규어 실사형', '3D 피규어 캐릭터형', '상담 후 결정'])
-        && requiredText(request.resource.data.preferredTime, 100)
+        && textOk(request.resource.data.preferredTime, 100)
         && textOk(request.resource.data.message, 2000)
         && request.resource.data.consent == true
+        && textOk(request.resource.data.consentVersion, 20)
         && request.resource.data.status == '접수'
         && request.resource.data.adminMemo == '';
 
@@ -88,8 +90,10 @@ service cloud.firestore {
       allow read: if isAdmin() || isOwner();
 
       allow create: if signedIn()
-        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'applicantName', 'daily', 'keepStory', 'questions',
-             'photoNote', 'photoCount', 'consent', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'applicationId', 'applicantName', 'daily', 'keepStory', 'questions',
+             'photoNote', 'photoCount', 'consent', 'consentVersion', 'createdAt'])
+        && textOk(request.resource.data.applicationId, 40)
+        && textOk(request.resource.data.consentVersion, 20)
         && stampedByMe()
         && requiredText(request.resource.data.applicantName, 40)
         && textOk(request.resource.data.daily, 2000)
@@ -115,7 +119,8 @@ service cloud.firestore {
         allow read: if isAdmin() || isOwner();
 
         allow create: if signedIn()
-          && request.resource.data.keys().hasOnly(['uid', 'dataUrl', 'name', 'width', 'height', 'order', 'createdAt'])
+          && request.resource.data.keys().hasOnly(['uid', 'dataUrl', 'name', 'caption', 'width', 'height', 'order', 'createdAt'])
+          && textOk(request.resource.data.caption, 300)
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.createdAt == request.time
           && request.resource.data.dataUrl is string
@@ -137,13 +142,23 @@ service cloud.firestore {
     match /inquiries/{inquiryId} {
       allow read: if isAdmin() || isOwner();
 
-      allow create: if signedIn()
-        && request.resource.data.keys().hasOnly(['uid', 'userEmail', 'name', 'title', 'body', 'answer', 'createdAt'])
-        && stampedByMe()
+      // 로그인한 사람은 내 기록으로, 로그인하지 않은 사람은 연락처를 꼭 남겨야 합니다.
+      allow create: if request.resource.data.keys().hasOnly(['uid', 'userEmail', 'name', 'title', 'body', 'contact',
+             'consent', 'consentVersion', 'answer', 'createdAt'])
         && requiredText(request.resource.data.name, 40)
         && requiredText(request.resource.data.title, 100)
         && requiredText(request.resource.data.body, 2000)
-        && request.resource.data.answer == '';
+        && request.resource.data.consent == true
+        && textOk(request.resource.data.consentVersion, 20)
+        && request.resource.data.answer == ''
+        && (
+          (signedIn() && stampedByMe() && textOk(request.resource.data.contact, 100))
+          || (!signedIn()
+            && request.resource.data.uid == ''
+            && request.resource.data.userEmail == ''
+            && requiredText(request.resource.data.contact, 100)
+            && request.resource.data.createdAt == request.time)
+        );
 
       allow update: if isAdmin()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answer', 'answeredAt'])

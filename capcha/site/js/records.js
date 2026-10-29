@@ -15,7 +15,8 @@ export function applicationRows(item, withContact) {
   return [
     ['신청자', item.applicantName],
     withContact ? ['연락처', h('a', { href: 'tel:' + String(item.phone || '').replace(/[^0-9]/g, ''), text: item.phone })] : null,
-    withContact && item.userEmail ? ['구글 계정', item.userEmail] : null,
+    withContact && item.userEmail ? ['로그인 계정', item.userEmail] : null,
+    ['신청서 번호', item.id.slice(0, 6)],
     ['부모님 연세대', item.parentAge],
     ['지역', item.region + (item.regionDetail ? ' (' + item.regionDetail + ')' : '')],
     ['원하는 결과물', (item.products || []).join(' · ')],
@@ -27,11 +28,12 @@ export function applicationRows(item, withContact) {
 export function storyRows(item, withContact) {
   return [
     ['신청자', item.applicantName],
-    withContact && item.userEmail ? ['구글 계정', item.userEmail] : null,
+    withContact && item.userEmail ? ['로그인 계정', item.userEmail] : null,
+    item.applicationId ? ['연결된 신청서', '신청서 ' + item.applicationId.slice(0, 6)] : ['연결된 신청서', '없음'],
     ['사소한 일상', item.daily],
     ['간직하고 싶은 이야기', item.keepStory],
     ['묻고 싶은 질문', item.questions],
-    ['사진 설명', item.photoNote],
+    ['사진 전체 메모', item.photoNote],
   ];
 }
 
@@ -71,7 +73,8 @@ export function openPhoto(photo) {
     h('span', { 'aria-hidden': 'true', text: '×' }));
   photoDialog.replaceChildren(
     close,
-    h('img', { src: photo.dataUrl, alt: photo.name || '사진' }),
+    h('img', { src: photo.dataUrl, alt: photo.caption || photo.name || '사진' }),
+    photo.caption ? h('p', { class: 'photo-caption', text: photo.caption }) : null,
     h('p', { class: 'dialog-actions' },
       h('a', { class: 'btn btn-sm', href: photo.dataUrl, download: (photo.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg', text: '사진 내려받기' })));
   photoDialog.showModal();
@@ -90,8 +93,9 @@ export function photoLoader(api, story) {
       // 사진 데이터가 이미지 형식일 때만 보여 줍니다.
       const photos = (await api.storyPhotos(story)).filter(function (p) { return /^data:image\/(jpeg|png|webp);base64,/.test(p.dataUrl || ''); });
       box.replaceChildren(h('ul', { class: 'photo-thumbs', 'aria-label': '올린 사진' }, photos.map(function (photo, i) {
-        return h('li', null, h('button', { class: 'photo-thumb', type: 'button', 'aria-label': (i + 1) + '번째 사진 크게 보기', onclick: function () { openPhoto(photo); } },
-          h('img', { src: photo.dataUrl, alt: '' })));
+        return h('li', null, h('button', { class: 'photo-thumb', type: 'button', 'aria-label': (i + 1) + '번째 사진 크게 보기' + (photo.caption ? ': ' + photo.caption : ''), onclick: function () { openPhoto(photo); } },
+          h('img', { src: photo.dataUrl, alt: '' })),
+          photo.caption ? h('p', { class: 'thumb-caption', text: photo.caption }) : null);
       })));
     } catch (error) {
       button.disabled = false;
