@@ -31,6 +31,7 @@ async function render(user) {
         h('span', { text: (user.email ? user.email + ' · ' : '') + (user.isAdmin ? '관리자' : '고객') + (app.mode === 'demo' ? ' (체험 계정)' : '') })),
       user.isAdmin ? h('a', { class: 'btn btn-sm', href: 'admin.html', text: '관리자 페이지' }) : null,
       h('button', { class: 'btn btn-sm', type: 'button', onclick: function () { app.signOut(); } }, '로그아웃')),
+    app.mode === 'demo' ? h('p', { class: 'demo-note' }, h('strong', { text: '체험판입니다. ' }), '여기 보이는 기록은 이 브라우저에만 저장되어 있고 운영자에게 전송되지 않았습니다. 다른 기기에서는 보이지 않습니다.') : null,
     h('div', { class: 'quick-links' },
       h('a', { class: 'btn btn-sm btn-solid', href: 'apply.html#apply-form', text: '신청서 작성' }),
       h('a', { class: 'btn btn-sm', href: 'story-form.html#story-form', text: '사전 질문지 작성' }),
@@ -41,10 +42,19 @@ async function render(user) {
   );
 
   load(apps, api.myApplications(), '아직 남긴 신청서가 없습니다.', function (item) {
+    function link(type) {
+      return 'contact.html?type=' + encodeURIComponent(type) + '&ref=' + encodeURIComponent(item.id) + '#contact-form';
+    }
     return h('li', { class: 'record' },
       recordHead('신청서', item.createdAt, item.status),
       dl(applicationRows(item, true)),
-      statusTrack(item.status));
+      statusTrack(item.status),
+      h('div', { class: 'record-links', role: 'group', 'aria-label': '이 신청서에 대한 요청' },
+        h('a', { class: 'btn btn-sm', href: 'story-form.html?app=' + encodeURIComponent(item.id) + '#story-form', text: '자료 추가 (사전 질문지)' }),
+        h('a', { class: 'btn btn-sm', href: link('수정 요청'), text: '수정 요청' }),
+        h('a', { class: 'btn btn-sm', href: link('일정 변경 요청'), text: '일정 변경 요청' }),
+        h('a', { class: 'btn btn-sm', href: link('취소 요청'), text: '취소 요청' })),
+      h('p', { class: 'record-meta', text: '수정 · 일정 변경 · 취소는 요청으로 받으며 처리 기준은 아직 정하지 않았습니다. 요청 결과는 내 문의의 답변으로 알려 드립니다.' }));
   });
   load(stories, api.myStories(), '아직 보낸 사전 질문지가 없습니다.', function (item) {
     return h('li', { class: 'record' },

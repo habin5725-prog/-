@@ -10,7 +10,9 @@ export const STATUSES = ['접수', '상담 중', '촬영 예정', '제작 중', 
 export const PRODUCTS = ['인터뷰 영상', '생애 기록 책', '3D 피규어 실사형', '3D 피규어 캐릭터형', '상담 후 결정'];
 export const AGES = ['60대', '70대', '80대', '90대 이상', '기타'];
 export const REGIONS = ['대전 동구', '대전 중구', '대전 서구', '대전 유성구', '대전 대덕구', '기타'];
-export const LIMITS = { name: 40, phone: 20, short: 100, text: 2000, memo: 1000, photos: 10 };
+export const LIMITS = { name: 40, phone: 20, short: 100, text: 2000, memo: 1000, caption: 300, photos: 10 };
+// 동의 안내문을 바꾸면 이 날짜도 바꿉니다. 기록마다 어떤 안내문에 동의했는지 함께 저장합니다.
+export const CONSENT_VERSION = '2026-10-29';
 
 const configured = Boolean(
   firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId && !firebaseConfig.apiKey.startsWith('[')
@@ -115,18 +117,20 @@ function cleanApplication(data) {
   return {
     applicantName: clip(data.applicantName, LIMITS.name),
     phone: clip(data.phone, LIMITS.phone),
-    parentAge: AGES.indexOf(data.parentAge) >= 0 ? data.parentAge : '기타',
+    parentAge: AGES.indexOf(data.parentAge) >= 0 ? data.parentAge : '',
     region: REGIONS.indexOf(data.region) >= 0 ? data.region : '기타',
     regionDetail: clip(data.regionDetail, LIMITS.short),
     products: (data.products || []).filter(function (p) { return PRODUCTS.indexOf(p) >= 0; }).slice(0, PRODUCTS.length),
     preferredTime: clip(data.preferredTime, LIMITS.short),
     message: clip(data.message, LIMITS.text),
     consent: data.consent === true,
+    consentVersion: CONSENT_VERSION,
   };
 }
 
 function cleanStory(data, photoCount) {
   return {
+    applicationId: clip(data.applicationId, 40),
     applicantName: clip(data.applicantName, LIMITS.name),
     daily: clip(data.daily, LIMITS.text),
     keepStory: clip(data.keepStory, LIMITS.text),
@@ -134,6 +138,19 @@ function cleanStory(data, photoCount) {
     photoNote: clip(data.photoNote, LIMITS.memo),
     photoCount: photoCount,
     consent: data.consent === true,
+    consentVersion: CONSENT_VERSION,
+  };
+}
+
+function cleanPhoto(photo, uid, order) {
+  return {
+    uid: uid,
+    dataUrl: photo.dataUrl,
+    name: clip(photo.name, LIMITS.short),
+    caption: clip(photo.caption, LIMITS.caption),
+    width: photo.width,
+    height: photo.height,
+    order: order,
   };
 }
 
@@ -142,6 +159,9 @@ function cleanInquiry(data) {
     name: clip(data.name, LIMITS.name),
     title: clip(data.title, LIMITS.short),
     body: clip(data.body, LIMITS.text),
+    contact: clip(data.contact, LIMITS.short),
+    consent: data.consent === true,
+    consentVersion: CONSENT_VERSION,
   };
 }
 
@@ -263,17 +283,28 @@ async function createFirebaseBackend() {
       }));
       // 사진은 한 장씩 따로 저장합니다. (문서 하나는 1MiB를 넘을 수 없습니다)
       // 문서 이름을 p0 ~ p9로 정해 두어 정해진 장수보다 더 올릴 수 없게 합니다. (보안 규칙과 같은 기준)
+      // 실패하면 두 번 더 시도하고, 이미 저장된 자리는 저장된 것으로 봅니다. (중복 저장 없음)
+      let saved = 0;
       for (let i = 0; i < list.length; i++) {
-        await fb.setDoc(fb.doc(db, 'stories', ref.id, 'photos', 'p' + i), {
-          uid: me.uid,
-          dataUrl: list[i].dataUrl,
-          name: clip(list[i].name, LIMITS.short),
-          width: list[i].width,
-          height: list[i].height,
-          order: i,
-          createdAt: fb.serverTimestamp(),
-        });
+        const photoRef = fb.doc(db, 'stories', ref.id, 'photos', 'p' + i);
+        let ok = false;
+        for (let attempt = 0; attempt < 3 && !ok; attempt++) {
+          try {
+            await fb.setDoc(photoRef, Object.assign(cleanPhoto(list[i], me.uid, i), { createdAt: fb.serverTimestamp() }));
+            ok = true;
+          } catch (error) {
+            try {
+              ok = (await fb.getDoc(photoRef)).exists();
+            } catch (e) {
+              ok = false;
+            }
+          }
+        }
+        if (ok) saved++;
         if (onProgress) onProgress(i + 1, list.length);
+      }
+      if (saved < list.length) {
+        throw new AppError('질문지는 저장했지만 사진 ' + list.length + '장 중 ' + saved + '장만 올라갔습니다. 마이페이지의 자료 추가로 다시 보내 주세요.', 'partial-upload');
       }
       return ref.id;
     },
@@ -290,10 +321,10 @@ async function createFirebaseBackend() {
     },
 
     addInquiry: async function (data) {
-      const me = requireUser();
+      // 로그인하지 않아도 문의할 수 있습니다. 이때는 남긴 연락처로 답합니다.
       const ref = await fb.addDoc(fb.collection(db, 'inquiries'), Object.assign(cleanInquiry(data), {
-        uid: me.uid,
-        userEmail: me.email,
+        uid: user ? user.uid : '',
+        userEmail: user ? user.email : '',
         answer: '',
         createdAt: fb.serverTimestamp(),
       }));
@@ -442,7 +473,7 @@ function createDemoBackend() {
       const item = Object.assign(cleanStory(input, list.length), { id: newId(), uid: me.uid, userEmail: me.email, createdAt: now() });
       data.stories.push(item);
       data.photos[item.id] = list.map(function (p, i) {
-        return { id: newId(), uid: me.uid, dataUrl: p.dataUrl, name: clip(p.name, LIMITS.short), width: p.width, height: p.height, order: i, createdAt: now() };
+        return Object.assign(cleanPhoto(p, me.uid, i), { id: newId(), createdAt: now() });
       });
       write(DATA_KEY, data);
       if (onProgress) onProgress(list.length, list.length);
@@ -458,9 +489,8 @@ function createDemoBackend() {
     removeStory: async function (story) { requireAdmin(); remove('stories', story.id); },
 
     addInquiry: async function (input) {
-      const me = requireUser();
       const data = load();
-      const item = Object.assign(cleanInquiry(input), { id: newId(), uid: me.uid, userEmail: me.email, answer: '', createdAt: now() });
+      const item = Object.assign(cleanInquiry(input), { id: newId(), uid: user ? user.uid : '', userEmail: user ? user.email : '', answer: '', createdAt: now() });
       data.inquiries.push(item);
       write(DATA_KEY, data);
       return item.id;

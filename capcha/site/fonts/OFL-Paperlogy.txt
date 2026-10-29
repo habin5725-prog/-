@@ -1,6 +1,7 @@
 Paperlogy (페이퍼로지)
 Copyright (c) 2024 PT& (피티앤). Paperlogy font is a trademark of Lee Juim.
 Redesigned by Lee Juim, glyphs from Gmarket Sans & Montserrat.
+이 사이트에는 원본 TTF를 글자 수 변경 없이 WOFF2 형식으로만 바꿔 넣었습니다.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

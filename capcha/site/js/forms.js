@@ -82,7 +82,10 @@ export function readForm(form) {
         data[el.name] = data[el.name] || [];
         if (el.checked) data[el.name].push(el.value);
       }
-    } else if (el.type !== 'file') {
+    } else if (el.type === 'radio') {
+      if (el.checked) data[el.name] = el.value;
+      else if (!(el.name in data)) data[el.name] = '';
+    } else if (el.type !== 'file' && !el.hasAttribute('data-skip')) {
       data[el.name] = el.value.trim();
     }
   });
@@ -102,10 +105,31 @@ export function showErrors(form, errors, statusEl) {
   if (statusEl) statusEl.textContent = '확인이 필요한 항목이 ' + errors.length + '개 있습니다.';
 }
 
-export function successPanel(title, text, actions) {
+/* 하나만 고르는 선택지. options: [[값, 보이는 글, 설명], ...] */
+export function radioGroup(name, label, options, o) {
+  const opts = o || {};
+  const id = 'f-' + name;
+  return h('fieldset', { class: 'field', 'data-field': name, 'aria-describedby': opts.hint ? id + '-hint' : null },
+    h('legend', null, labelText(label, opts.required)), hintEl(id, opts.hint),
+    h('div', { class: 'choice-list' },
+      options.map(function (opt, i) {
+        return h('label', { class: 'choice choice-rich' },
+          h('input', { type: 'radio', name: name, value: opt[0], id: id + '-' + i, checked: opts.value === opt[0] }),
+          h('span', null, h('strong', { text: opt[1] }), opt[2] ? h('small', { text: opt[2] }) : null));
+      })));
+}
+
+/* 체험판에서 폼 위에 보이는 안내 */
+export function demoNotice() {
+  return h('p', { class: 'demo-note' },
+    h('strong', { text: '체험판입니다. ' }),
+    '보내기를 눌러도 운영자에게 전송되지 않고 이 브라우저에만 저장됩니다. 실제 이름 · 연락처 대신 예시 내용을 넣어 주세요.');
+}
+
+export function successPanel(title, text, actions, demo) {
   const heading = h('h2', { tabindex: '-1', text: title });
   const panel = h('div', { class: 'form-card success' },
-    h('p', { class: 'eyebrow', lang: 'en', text: 'Thank You' }),
+    h('p', { class: 'eyebrow', lang: 'en', text: demo ? 'Saved in This Browser' : 'Thank You' }),
     heading,
     h('p', { text: text }),
     h('div', null, actions.map(function (a, i) {

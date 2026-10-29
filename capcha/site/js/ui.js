@@ -52,7 +52,8 @@ export function loginGate(app, options) {
     h('h2', { class: 'gate-title', text: opts.title || '로그인이 필요합니다' }),
     h('p', { class: 'gate-text', text: opts.text || '둘러보기는 로그인 없이 할 수 있습니다. 작성하려면 로그인해 주세요.' }),
     h('button', { class: 'btn btn-solid', type: 'button', onclick: function () { app.openLogin(); } },
-      app.mode === 'demo' ? '체험 계정으로 로그인' : '구글 계정으로 로그인')
+      app.mode === 'demo' ? '체험 계정 고르기' : '구글 계정으로 로그인'),
+    opts.extra || null
   );
 }
 
@@ -69,7 +70,14 @@ export function setFieldError(field, message) {
   const control = field.querySelector('input, select, textarea');
   let error = field.querySelector('.field-error');
   if (!message) {
-    if (error) error.remove();
+    if (error) {
+      if (control) {
+        const rest = (control.getAttribute('aria-describedby') || '').split(' ').filter(function (id) { return id && id !== error.id; });
+        if (rest.length) control.setAttribute('aria-describedby', rest.join(' '));
+        else control.removeAttribute('aria-describedby');
+      }
+      error.remove();
+    }
     field.classList.remove('has-error');
     if (control) control.removeAttribute('aria-invalid');
     return;

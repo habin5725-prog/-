@@ -178,7 +178,7 @@ function applicationCard(item) {
 }
 
 function downloadCsv() {
-  const header = ['접수일', '신청자', '연락처', '구글 계정', '부모님 연세대', '지역', '기타 지역', '원하는 결과물', '희망 시기', '남기실 말씀', '진행 상태', '관리자 메모'];
+  const header = ['접수일', '신청자', '연락처', '로그인 계정', '부모님 연세대', '지역', '기타 지역', '원하는 결과물', '희망 시기', '남기실 말씀', '진행 상태', '관리자 메모'];
   const rows = (state.applications || []).map(function (a) {
     return [formatDate(a.createdAt), a.applicantName, a.phone, a.userEmail, a.parentAge, a.region, a.regionDetail, (a.products || []).join(' / '), a.preferredTime, a.message, a.status, a.adminMemo];
   });
@@ -277,7 +277,11 @@ function inquiryCard(item) {
   const head = recordHead(item.title, item.createdAt, null);
   head.append(badge);
   card.append(head,
-    dl([['보낸 사람', item.name + (item.userEmail ? ' (' + item.userEmail + ')' : '')], ['내용', item.body]]),
+    dl([
+      ['보낸 사람', item.name + (item.userEmail ? ' (' + item.userEmail + ')' : ' (로그인 안 함)')],
+      ['답변 받을 연락처', item.contact],
+      ['내용', item.body],
+    ]),
     h('div', { class: 'record-actions' },
       h('div', { class: 'field' }, h('label', { for: 'ans-' + item.id, text: '답변' }), answer),
       save, del));
@@ -318,7 +322,7 @@ function drawFamilies() {
   const submit = h('button', { class: 'btn btn-solid btn-sm', type: 'submit' }, '페이지 만들기');
   const form = h('form', { class: 'form-card', novalidate: true, style: 'max-width:none;margin-bottom:28px' },
     h('h3', { class: 'block-title', text: '새 가족 영상 페이지 만들기' }),
-    h('p', { class: 'field-hint', style: 'margin:8px 0 22px', text: '주소는 추측하기 어려운 12자리로 자동으로 만들어집니다. 유튜브 영상은 일부 공개로 올린 뒤 주소를 붙여 넣으세요.' }),
+    h('p', { class: 'field-hint', style: 'margin:8px 0 22px', text: '주소는 추측하기 어려운 12자리로 자동으로 만들어집니다. 다만 일부 공개 영상이라 링크를 아는 사람은 누구나 볼 수 있습니다. 유튜브 영상은 일부 공개로 올린 뒤 주소를 붙여 넣으세요.' }),
     h('div', { class: 'field' }, h('label', { for: 'fam-title' }, '영상 제목', h('span', { class: 'req', text: '필수' })), title),
     h('div', { class: 'field' }, h('label', { for: 'fam-video' }, '유튜브 주소', h('span', { class: 'opt', text: '선택' })),
       h('p', { class: 'field-hint', id: 'fam-video-hint', text: '비워 두면 영상 준비 중으로 보입니다.' }), video),

@@ -7,21 +7,21 @@
 /* ---------- 글꼴 ---------- */
 @font-face {
   font-family: 'Paperlogy';
-  src: url('../fonts/Paperlogy-4Regular.ttf') format('truetype');
+  src: url('../fonts/Paperlogy-4Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Paperlogy';
-  src: url('../fonts/Paperlogy-5Medium.ttf') format('truetype');
+  src: url('../fonts/Paperlogy-5Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Paperlogy';
-  src: url('../fonts/Paperlogy-7Bold.ttf') format('truetype');
+  src: url('../fonts/Paperlogy-7Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -82,7 +82,7 @@ html {
 body {
   margin: 0;
   font-family: var(--font-ko);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.8;
   color: var(--c-body);
@@ -91,7 +91,7 @@ body {
   overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
-  body { font-size: 16px; }
+  body { font-size: 17px; }
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -233,20 +233,28 @@ p { margin: 0; }
 }
 .logo-ko {
   margin-top: 7px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.5em;
-  margin-right: -0.5em;
-  opacity: 0.9;
+  letter-spacing: 0.08em;
+  margin-right: -0.08em;
+  opacity: 0.95;
 }
+/* 휴대폰에서는 메뉴를 한 줄로 두고 넘치면 옆으로 밀어서 봅니다. (머리글 높이를 일정하게) */
+.gnb {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.gnb::-webkit-scrollbar { display: none; }
 .gnb ul {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: max-content;
   gap: 0 18px;
-  margin: 0;
-  padding: 0;
+  margin: 0 auto;
+  padding: 0 4px;
   list-style: none;
+  white-space: nowrap;
 }
 .gnb a {
   position: relative;
@@ -381,11 +389,13 @@ p { margin: 0; }
   font-weight: 700;
   letter-spacing: 0.02em;
 }
-/* 영문 제목 없이 한국어 제목만 있을 때 */
+/* 한국어 제목을 주 제목으로 씁니다. (영문은 위의 작은 문구로만) */
 .sec-title .ko:only-child {
   margin-top: 0;
-  font-size: clamp(22px, 4.6vw, 30px);
-  line-height: 1.45;
+  font-size: clamp(26px, 5.6vw, 40px);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
 }
 .sec-desc { margin-top: 18px; }
 .on-dark .sec-title,
@@ -1087,8 +1097,8 @@ p { margin: 0; }
   padding: 8px var(--gutter);
   background: #2b2420;
   color: #f4ece1;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.55;
   text-align: center;
 }
 .demo-bar strong { color: var(--c-amber); font-weight: 700; }
@@ -1327,7 +1337,7 @@ p { margin: 0; }
 }
 .req { color: var(--c-amber-ink); }
 .opt { color: var(--c-body); }
-.field-hint { margin: -2px 0 10px; font-size: 13px; color: var(--c-body); }
+.field-hint { margin: -2px 0 10px; font-size: 14px; color: var(--c-body); }
 .input,
 .select,
 .textarea {
@@ -1389,7 +1399,7 @@ p { margin: 0; }
   padding: 18px 20px;
   border-radius: 8px;
   background: var(--c-gray-bg);
-  font-size: 14px;
+  font-size: 15px;
 }
 .consent ul { margin: 8px 0 14px; padding-left: 18px; }
 .consent a { color: var(--c-title); font-weight: 500; text-underline-offset: 3px; }
@@ -1744,6 +1754,185 @@ p { margin: 0; }
   background: var(--c-gray-bg);
   font-size: 14px;
 }
+
+/* ==========================================================
+   피드백 반영 (체험/운영 문구 · 안내 표 · 폼 보조)
+   ========================================================== */
+/* 체험판과 운영 모드에 따라 보이는 문구 (app.js가 html에 클래스를 붙입니다) */
+html:not(.is-demo):not(.is-live) .demo-only,
+html:not(.is-demo):not(.is-live) .live-only,
+.is-demo .live-only,
+.is-live .demo-only { display: none !important; }
+
+.demo-note {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border: 1px solid #e7cfa9;
+  border-radius: 8px;
+  background: #fff8ee;
+  font-size: 15px;
+  color: #4a3a2a;
+}
+.demo-note strong { color: #6b4316; }
+.form-guide {
+  margin: -12px 0 26px;
+  font-size: 15px;
+  color: var(--c-title);
+}
+.gate-sub { margin-top: 18px; font-size: 15px; }
+.gate-sub a { color: var(--c-title); font-weight: 500; text-underline-offset: 3px; }
+.link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-title);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.choice-rich { align-items: flex-start; }
+.choice-rich input { margin-top: 3px; }
+.choice-rich span { display: grid; gap: 2px; }
+.choice-rich small { font-size: 14px; color: var(--c-body); }
+.draft-note {
+  margin: -8px 0 24px;
+  font-size: 14px;
+  color: var(--c-body);
+}
+.btn-mini {
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 1px solid var(--c-field);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-title);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-mini[disabled] { opacity: 0.45; cursor: default; }
+.btn-mini-danger { border-color: #c98b84; color: #a8261b; }
+.photo-guide { margin-top: 12px; font-size: 14px; text-align: left; }
+.photo-guide ul { margin: 6px 0 0; padding-left: 18px; }
+.photo-list {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.photo-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  background: #fff;
+}
+.photo-meta label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 700; color: var(--c-title); }
+.photo-meta .textarea { min-height: 0; font-size: 16px; }
+.photo-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.photo-caption { margin: 0 0 8px; text-align: center; font-size: 15px; color: var(--c-title); }
+.thumb-caption { margin: 4px 0 0; font-size: 13px; line-height: 1.4; color: var(--c-body); }
+.record-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+
+/* 결과물 카드: 기본 구성과 추가 선택 구분 */
+.card-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 10px;
+  border: 1px solid var(--c-amber-ink);
+  border-radius: 999px;
+  font-family: var(--font-ko);
+  font-size: 12px;
+  letter-spacing: 0;
+  color: var(--c-amber-ink);
+  vertical-align: 2px;
+}
+.card-option { box-shadow: none; border: 1px dashed var(--c-line-strong); }
+.example-label {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 3;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(34, 34, 34, 0.78);
+  color: #fff;
+  font-size: 12px;
+}
+
+/* 첫 화면: 한국어 제목 · 고정 버튼 · 운영 상태 */
+.hero-title-ko {
+  margin: 0;
+  font-size: clamp(28px, 6.4vw, 54px);
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
+.hero-actions .btn { margin-top: 0; }
+@media (max-width: 767px) {
+  /* 휴대폰: 내용을 위에서부터 놓아 머리글과 겹치지 않게 하고 첫 화면을 조금 높입니다. */
+  .hero { min-height: 640px; }
+  .hero-slide { align-items: flex-start; }
+  .hero-content { padding-top: 140px; }
+  .hero-state .state-long { display: none; }
+}
+.hero-state {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 14px;
+  color: #fff;
+}
+
+/* 안내 표 (기본 구성 · 아직 정하지 않은 항목) */
+.spec-table {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: #fff;
+}
+.spec-table caption { margin-bottom: 12px; font-size: 15px; text-align: left; color: var(--c-body); }
+.spec-table th,
+.spec-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--c-line);
+  text-align: left;
+  vertical-align: top;
+}
+.spec-table thead th { background: var(--c-gray-bg); color: var(--c-title); font-weight: 700; }
+.spec-table tbody th { width: 28%; color: var(--c-title); font-weight: 700; }
+.tbd { color: #6b4316; font-weight: 500; }
+@media (max-width: 599px) {
+  .spec-table thead { display: none; }
+  .spec-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--c-line); }
+  .spec-table th, .spec-table td { display: block; width: auto; padding: 4px 0; border: 0; }
+  .spec-table tbody th { width: auto; }
+}
+.principles { max-width: 820px; margin: 28px auto 0; padding-left: 20px; }
+.principles li + li { margin-top: 8px; }
+
+/* 기타 */
+.sub-title { max-width: 820px; margin: 48px auto 0; font-size: 20px; }
+.results-note { margin-top: 28px; font-size: 15px; text-align: center; }
+.results-note a { color: var(--c-title); font-weight: 500; text-underline-offset: 3px; }
+.policy h3 { margin: 30px 0 10px; font-size: 17px; }
+
+/* 작업용 화면 머리: 높이를 줄이고 바로가기 제공 */
+.page-hero-work { min-height: 0; }
+.page-hero-work .page-hero-content { padding-bottom: 40px; }
+.page-hero-work .sec-desc a { color: #fff; font-weight: 700; text-underline-offset: 4px; }
 
 /* ---------- 서서히 나타나기 ----------
    main.js가 화면 아래쪽 요소에만 .is-hidden을 붙입니다.
